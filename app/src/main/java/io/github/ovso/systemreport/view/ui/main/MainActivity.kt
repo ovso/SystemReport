@@ -18,6 +18,7 @@ import io.github.ovso.systemreport.databinding.ActivityMainBinding
 import io.github.ovso.systemreport.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
+import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -60,15 +61,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     setupToolbar()
     setupDrawerLayout()
     setupNavigation()
-
-    updateList()
+    
+    updatePagerList()
   }
 
-  private fun updateList() {
-    viewModel?.fetchList()
-    viewModel?.mutableLiveData?.observe(this, Observer {
+  private fun updatePagerList() {
+    viewModel?.itemsLiveData?.observe(this, Observer {
       viewModel!!.setItems(it)
     })
+    viewModel?.titlesLiveData?.observe(this, Observer {
+      for (title in it) {
+        var newTab = tablayout_main.newTab()
+        newTab.text = title
+        tablayout_main.addTab(newTab)
+      }
+    })
+    viewModel?.fetchList()
   }
 
   override fun onBackPressed() {
