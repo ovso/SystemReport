@@ -7,7 +7,8 @@ import io.github.ovso.systemreport.viewmodels.MainViewModel
 class MainPagerAdapter(
   private var viewModel: MainViewModel
 ) : RecyclerView.Adapter<MainPagerViewHolder>() {
-  var items = listOf<String>()
+  var items = arrayListOf<String>()
+
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int

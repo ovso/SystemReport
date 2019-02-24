@@ -7,6 +7,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.R.id
@@ -22,25 +24,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   private var viewModel: MainViewModel? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setupViewModel()
     setupBinding(savedInstanceState)
-    setupToolbar()
-    setupDrawerLayout()
-    setupNavigation()
-    setupTabLayout()
-    setupViewPager()
   }
 
   private fun setupViewModel() {
-
-  }
-
-  private fun setupViewPager() {
-
-  }
-
-  private fun setupTabLayout() {
-
+    viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        .create(MainViewModel::class.java)
   }
 
   private fun setupNavigation() {
@@ -61,16 +50,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   }
 
   private fun setupBinding(savedInstanceState: Bundle?) {
+    setupViewModel()
     var binding: ActivityMainBinding = DataBindingUtil.setContentView(
         this,
         layout.activity_main
     )
-
-    if (savedInstanceState == null) {
-      viewModel?.init()
-    }
     binding.viewModel = viewModel
-    binding.executePendingBindings()
+
+    setupToolbar()
+    setupDrawerLayout()
+    setupNavigation()
+
+    updateList()
+  }
+
+  private fun updateList() {
+    viewModel?.fetchList()
+    viewModel?.mutableLiveData?.observe(this, Observer {
+      viewModel!!.setItems(it)
+    })
   }
 
   override fun onBackPressed() {
