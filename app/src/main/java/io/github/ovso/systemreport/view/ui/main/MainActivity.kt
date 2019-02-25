@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     setupToolbar()
     setupDrawerLayout()
     setupNavigation()
-    
+
     updatePagerList()
   }
 
