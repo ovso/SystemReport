@@ -1,18 +1,17 @@
 package io.github.ovso.systemreport.view.bindings
 
 import androidx.databinding.BindingAdapter
+import androidx.databinding.ObservableField
 import com.google.android.material.tabs.TabLayout
 
 object MainBindingAdapter {
+
   @JvmStatic
-  @BindingAdapter("bind:titles") fun bindTabs(
+  @BindingAdapter("bind:currentItem") fun currentItem(
     tabLayout: TabLayout,
-    titles: ArrayList<String>
+    index: Int
   ) {
-    for (title in titles) {
-      var newTab = tabLayout.newTab()
-      newTab.text = title
-      tabLayout.addTab(newTab)
-    }
+    tabLayout.getTabAt(index)
+        ?.select()
   }
 }

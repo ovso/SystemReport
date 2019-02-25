@@ -10,7 +10,7 @@ import timber.log.Timber
 class MainPagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
   fun bind(position: Int) {
-    Timber.d("bind($position)")
+    //Timber.d("bind($position)")
   }
 
   companion object {
