@@ -1,5 +1,6 @@
 package io.github.ovso.systemreport.view.ui.main
 
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
+import github.nisrulz.easydeviceinfo.base.EasyCpuMod
+import github.nisrulz.easydeviceinfo.base.EasyDeviceMod
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.R.id
 import io.github.ovso.systemreport.R.layout
@@ -20,12 +23,41 @@ import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
+import java.io.IOException
+import java.io.InputStream
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var viewModel: MainViewModel? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setupBinding(savedInstanceState)
+    test()
+  }
+
+  private fun test() {
+
+//    println("SERIAL: " + Build.SERIAL);
+//    println("MODEL: " + Build.MODEL);
+//    println("ID: " + Build.ID);
+//    println("Manufacture: " + Build.MANUFACTURER);
+//    println("brand: " + Build.BRAND);
+//    println("type: " + Build.TYPE);
+//    println("user: " + Build.USER);
+//    println("BASE: " + Build.VERSION_CODES.BASE);
+//    println("INCREMENTAL " + Build.VERSION.INCREMENTAL);
+//    println("SDK  " + Build.VERSION.SDK);
+//    println("BOARD: " + Build.BOARD);
+//    println("BRAND " + Build.BRAND);
+//    println("HOST " + Build.HOST);
+//    println("FINGERPRINT: " + Build.FINGERPRINT);
+//    println("Version Code: " + Build.VERSION.RELEASE);
+//
+//    var easyCpuMod = EasyCpuMod()
+//    println(easyCpuMod.stringSupported32bitABIS)
+//    var easyDeviceMod = EasyDeviceMod(this)
+//    println(EasyDeviceMod(this).model)
+
+    println(getCPUDetails())
   }
 
   private fun setupViewModel() {
@@ -129,4 +161,40 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     drawer_layout.closeDrawer(GravityCompat.START)
     return true
   }
+
+  fun getCPUDetails(): String {
+
+    /*
+     *Created By Atiar Talukdar
+     * 01/01/2018
+     * contact@atiar.info
+     */
+
+    val processBuilder: ProcessBuilder
+    var cpuDetails = ""
+    val DATA = arrayOf("/system/bin/cat", "/proc/cpuinfo")
+    val `is`: InputStream
+    val process: Process
+    val bArray: ByteArray
+    bArray = ByteArray(1024)
+
+    try {
+      processBuilder = ProcessBuilder(*DATA)
+
+      process = processBuilder.start()
+
+      `is` = process.inputStream
+
+      while (`is`.read(bArray) !== -1) {
+        cpuDetails = cpuDetails + String(bArray)   //Stroing all the details in cpuDetails
+      }
+      `is`.close()
+
+    } catch (ex: IOException) {
+      ex.printStackTrace()
+    }
+
+    return cpuDetails
+  }
+
 }

@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.main.adapter
+package io.github.ovso.systemreport.view.ui.main
 
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.Tab

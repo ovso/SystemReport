@@ -1,7 +1,8 @@
-package io.github.ovso.systemreport.view.ui.main.adapter
+package io.github.ovso.systemreport.view.ui.main
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import io.github.ovso.systemreport.view.ui.main.viewholder.MainPagerViewHolder
 import io.github.ovso.systemreport.viewmodels.MainViewModel
 
 class MainPagerAdapter(
@@ -24,4 +25,5 @@ class MainPagerAdapter(
   ) {
     holder.bind(position)
   }
+
 }

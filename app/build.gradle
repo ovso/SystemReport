@@ -60,7 +60,10 @@ dependencies {
     implementation deps.timber
 
     implementation deps.glide.runtime
-    annotationProcessor deps.glide.compiler
+    kapt deps.glide.compiler
+
+    implementation deps.easydeviceinfo
+
 
     testImplementation deps.atsl.junit
     androidTestImplementation deps.atsl.runner

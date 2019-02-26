@@ -4,11 +4,12 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import io.github.ovso.systemreport.view.ui.main.adapter.MainPagerAdapter
-import io.github.ovso.systemreport.view.ui.main.adapter.SimpleOnTabSelectedListener
+import io.github.ovso.systemreport.view.ui.main.MainPagerAdapter
+import io.github.ovso.systemreport.view.ui.main.SimpleOnTabSelectedListener
 
 class MainViewModel : ViewModel() {
-  var adapter: MainPagerAdapter? = MainPagerAdapter(this)
+  var adapter: MainPagerAdapter? =
+    MainPagerAdapter(this)
   var itemsLiveData = MutableLiveData<ArrayList<String>>()
   var titlesLiveData = MutableLiveData<ArrayList<String>>()
   var selectedObField = ObservableField(0)
