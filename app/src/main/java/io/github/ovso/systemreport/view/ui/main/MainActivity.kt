@@ -11,8 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.navigation.NavigationView
-import github.nisrulz.easydeviceinfo.base.EasyCpuMod
-import github.nisrulz.easydeviceinfo.base.EasyDeviceMod
+import github.nisrulz.easydeviceinfo.base.BatteryHealth
+import github.nisrulz.easydeviceinfo.base.EasyAppMod
+import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
+import github.nisrulz.easydeviceinfo.base.EasySensorMod
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.R.id
 import io.github.ovso.systemreport.R.layout
@@ -23,8 +25,9 @@ import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
-import java.io.IOException
-import java.io.InputStream
+import timber.log.Timber
+import java.io.File
+import java.util.Scanner
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var viewModel: MainViewModel? = null
@@ -35,29 +38,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   }
 
   private fun test() {
+//    var cpuInfoMap = getCpuInfoMap()
+//    var modelName = cpuInfoMap.get("model name")
+    var allSensors = EasySensorMod(this).allSensors
 
-//    println("SERIAL: " + Build.SERIAL);
-//    println("MODEL: " + Build.MODEL);
-//    println("ID: " + Build.ID);
-//    println("Manufacture: " + Build.MANUFACTURER);
-//    println("brand: " + Build.BRAND);
-//    println("type: " + Build.TYPE);
-//    println("user: " + Build.USER);
-//    println("BASE: " + Build.VERSION_CODES.BASE);
-//    println("INCREMENTAL " + Build.VERSION.INCREMENTAL);
-//    println("SDK  " + Build.VERSION.SDK);
-//    println("BOARD: " + Build.BOARD);
-//    println("BRAND " + Build.BRAND);
-//    println("HOST " + Build.HOST);
-//    println("FINGERPRINT: " + Build.FINGERPRINT);
-//    println("Version Code: " + Build.VERSION.RELEASE);
-//
-//    var easyCpuMod = EasyCpuMod()
-//    println(easyCpuMod.stringSupported32bitABIS)
-//    var easyDeviceMod = EasyDeviceMod(this)
-//    println(EasyDeviceMod(this).model)
+    var battery = EasyBatteryMod(this);
+    Timber.d("batteryHealth = ${battery.batteryHealth}")
+    Timber.d("batteryPercentage = ${battery.batteryPercentage}")
+    Timber.d("batteryTechnology = ${battery.batteryTechnology}")
+    Timber.d("batteryTemperature = ${battery.batteryTemperature}")
+    Timber.d("batteryVoltage = ${battery.batteryVoltage}")
+    Timber.d("isBatteryPresent = ${battery.isBatteryPresent}")
 
-    println(getCPUDetails())
   }
 
   private fun setupViewModel() {
@@ -162,39 +154,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     return true
   }
 
-  fun getCPUDetails(): String {
-
-    /*
-     *Created By Atiar Talukdar
-     * 01/01/2018
-     * contact@atiar.info
-     */
-
-    val processBuilder: ProcessBuilder
-    var cpuDetails = ""
-    val DATA = arrayOf("/system/bin/cat", "/proc/cpuinfo")
-    val `is`: InputStream
-    val process: Process
-    val bArray: ByteArray
-    bArray = ByteArray(1024)
-
+  fun getCpuInfoMap(): Map<String, String> {
+    val map = HashMap<String, String>()
     try {
-      processBuilder = ProcessBuilder(*DATA)
-
-      process = processBuilder.start()
-
-      `is` = process.inputStream
-
-      while (`is`.read(bArray) !== -1) {
-        cpuDetails = cpuDetails + String(bArray)   //Stroing all the details in cpuDetails
+      val s = Scanner(File("/proc/cpuinfo"))
+      while (s.hasNextLine()) {
+        val vals = s.nextLine()
+            .split(": ")
+        if (vals.size > 1) {
+          map[vals[0].trim({ it <= ' ' })] = vals[1].trim({ it <= ' ' })
+        }
       }
-      `is`.close()
-
-    } catch (ex: IOException) {
-      ex.printStackTrace()
+    } catch (e: Exception) {
+      //Log.e("getCpuInfoMap", Log.getStackTraceString(e))
     }
 
-    return cpuDetails
+    return map
   }
 
+  fun printDeviceInfo() {
+    println("MODEL: " + Build.MODEL);
+    println("ID: " + Build.ID);
+    println("Manufacture: " + Build.MANUFACTURER);
+    println("brand: " + Build.BRAND);
+    println("type: " + Build.TYPE);
+    println("user: " + Build.USER);
+    println("BASE: " + Build.VERSION_CODES.BASE);
+    println("INCREMENTAL " + Build.VERSION.INCREMENTAL);
+    println("SDK  " + Build.VERSION.SDK);
+    println("BOARD: " + Build.BOARD);
+    println("BRAND " + Build.BRAND);
+    println("HOST " + Build.HOST);
+    println("FINGERPRINT: " + Build.FINGERPRINT);
+    println("Version Code: " + Build.VERSION.RELEASE);
+
+  }
 }
