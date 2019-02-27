@@ -4,68 +4,71 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion build_version.compile_sdk
-    defaultConfig {
-        applicationId build_version.app_id
-        minSdkVersion build_version.min_sdk
-        targetSdkVersion build_version.target_sdk
-        versionCode build_version.version_code
-        versionName build_version.version_name
-        vectorDrawables.useSupportLibrary true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  compileSdkVersion build_version.compile_sdk
+  defaultConfig {
+    applicationId build_version.app_id
+    minSdkVersion build_version.min_sdk
+    targetSdkVersion build_version.target_sdk
+    versionCode build_version.version_code
+    versionName build_version.version_name
+    vectorDrawables.useSupportLibrary true
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            minifyEnabled false
-        }
+    debug {
+      minifyEnabled false
     }
-    dataBinding {
-        enabled = true
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+  }
+  dataBinding {
+    enabled = true
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 
-    androidExtensions {
-        experimental = true
-    }
+  androidExtensions {
+    experimental = true
+  }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation deps.kotlin
-    implementation deps.androidx.appcompat
-    implementation deps.androidx.material
-    implementation deps.androidx.constraintlayout
-    implementation deps.androidx.ktx_core
-    implementation deps.androidx.viewpager2
-    implementation deps.androidx.paging_runtime
-    implementation deps.androidx.paging_rxjava2
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation deps.kotlin
+  implementation deps.androidx.appcompat
+  implementation deps.androidx.material
+  implementation deps.androidx.constraintlayout
+  implementation deps.androidx.ktx_core
+  implementation deps.androidx.viewpager2
+  implementation deps.androidx.paging_runtime
+  implementation deps.androidx.paging_rxjava2
 
-    implementation deps.rx.rxjava2
-    implementation deps.rx.rxandroid
-    implementation deps.rx.rxkotlin2
+  implementation deps.rx.rxjava2
+  implementation deps.rx.rxandroid
+  implementation deps.rx.rxkotlin2
 
-    implementation deps.retrofit.runtime
-    implementation deps.retrofit.gson
-    implementation deps.retrofit.rxjava2
-    implementation deps.okhttp.runtime
-    implementation deps.okhttp.logging_interceptor
+  implementation deps.retrofit.runtime
+  implementation deps.retrofit.gson
+  implementation deps.retrofit.rxjava2
+  implementation deps.okhttp.runtime
+  implementation deps.okhttp.logging_interceptor
 
-    implementation deps.timber
+  implementation deps.timber
 
-    implementation deps.glide.runtime
-    kapt deps.glide.compiler
+  implementation deps.glide.runtime
+  implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
+  implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+  implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
+  kapt deps.glide.compiler
 
-    implementation deps.easydeviceinfo
+  implementation deps.easydeviceinfo
 
 
-    testImplementation deps.atsl.junit
-    androidTestImplementation deps.atsl.runner
-    androidTestImplementation deps.atsl.espressocore
+  testImplementation deps.atsl.junit
+  androidTestImplementation deps.atsl.runner
+  androidTestImplementation deps.atsl.espressocore
 }

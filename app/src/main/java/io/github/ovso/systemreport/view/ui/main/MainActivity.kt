@@ -10,6 +10,8 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.get
 import com.google.android.material.navigation.NavigationView
 import github.nisrulz.easydeviceinfo.base.BatteryHealth
 import github.nisrulz.easydeviceinfo.base.EasyAppMod
@@ -53,6 +55,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   }
 
   private fun setupViewModel() {
+    ViewModelProviders.of(this)
+        .get(MainViewModel::class.java)
     viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         .create(MainViewModel::class.java)
   }
