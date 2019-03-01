@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 
 import io.github.ovso.systemreport.R
+import io.github.ovso.systemreport.viewmodels.fragment.ThermalViewModel
 
-class Thermal : Fragment() {
+class ThermalFragment : Fragment() {
 
   companion object {
-    fun newInstance() = Thermal()
+    fun newInstance() = ThermalFragment()
   }
 
   private lateinit var viewModel: ThermalViewModel

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="info_type">
+    <item>SoC</item>
+    <item>Device</item>
+    <item>System</item>
+    <item>Battery</item>
+    <item>Thermal</item>
+    <item>Sensors</item>
+  </string-array>
+</resources>

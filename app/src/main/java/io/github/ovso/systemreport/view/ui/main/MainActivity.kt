@@ -8,13 +8,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import androidx.lifecycle.ViewModelProvider.Factory
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import com.google.android.material.navigation.NavigationView
-import github.nisrulz.easydeviceinfo.base.BatteryHealth
-import github.nisrulz.easydeviceinfo.base.EasyAppMod
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import github.nisrulz.easydeviceinfo.base.EasySensorMod
 import io.github.ovso.systemreport.R
@@ -27,12 +28,17 @@ import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
+import kotlinx.android.synthetic.main.content_main.viewpager2_main
 import timber.log.Timber
 import java.io.File
 import java.util.Scanner
+import kotlin.collections.HashMap
+import kotlin.collections.Map
+import kotlin.collections.set
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var viewModel: MainViewModel? = null
+  private var adapter: MainPagerAdapter? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setupBinding(savedInstanceState)
@@ -54,11 +60,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   }
 
+  @Suppress("UNCHECKED_CAST")
   private fun setupViewModel() {
-    ViewModelProviders.of(this)
+    viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return MainViewModel(application) as T
+      }
+    })
         .get(MainViewModel::class.java)
-    viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        .create(MainViewModel::class.java)
+
   }
 
   private fun setupNavigation() {
@@ -85,7 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         layout.activity_main
     )
     binding.viewModel = viewModel
-
+    setupAdapter();
     setupToolbar()
     setupDrawerLayout()
     setupNavigation()
@@ -93,9 +103,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     updatePagerList()
   }
 
+  private fun setupAdapter() {
+    adapter = MainPagerAdapter(viewModel!!, supportFragmentManager)
+    viewpager2_main.adapter = adapter
+  }
+
   private fun updatePagerList() {
     viewModel?.itemsLiveData?.observe(this, Observer {
-      viewModel!!.setItems(it)
+      adapter?.items = it
+      adapter?.notifyDataSetChanged()
     })
     viewModel?.titlesLiveData?.observe(this, Observer {
       for (title in it) {
