@@ -13,11 +13,12 @@ import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.viewmodels.fragment.BatteryViewModel
 import kotlinx.android.synthetic.main.fragment_battery.linearlayout_battery_itemcontainer
+import timber.log.Timber
 
 class BatteryFragment : Fragment() {
 
   companion object {
-    fun newInstance() = SystemFragment()
+    fun newInstance() = BatteryFragment()
   }
 
   private lateinit var viewModel: BatteryViewModel
@@ -47,11 +48,10 @@ class BatteryFragment : Fragment() {
     infos.add("batteryTechnology = ${battery.batteryTechnology}")
     infos.add("batteryTemperature = ${battery.batteryTemperature}")
     infos.add("batteryVoltage = ${battery.batteryVoltage}")
-    infos.add("isBatteryPresent = ${battery.isBatteryPresent}")
-
-
+    infos.add("chargingSource = ${battery.chargingSource}")
 
     for (info in infos) {
+      Timber.d("info = %s", info)
       var view = TextView(context)
       view.setText(info)
       view.layoutParams = LayoutParams(

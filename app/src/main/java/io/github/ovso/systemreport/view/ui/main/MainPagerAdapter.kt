@@ -22,7 +22,7 @@ class MainPagerAdapter(
   override fun getItemCount() = items.size
 
   companion object {
-    private fun provideFragment(position: Int, viewmodel:MainViewModel? = null): Fragment? {
+    private fun provideFragment(position: Int): Fragment? {
       var f: Fragment? = null
       when (position) {
         0 -> f = SocFragment.newInstance()

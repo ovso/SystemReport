@@ -8,16 +8,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
-import androidx.lifecycle.ViewModelProvider.Factory
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.navigation.NavigationView
-import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
-import github.nisrulz.easydeviceinfo.base.EasySensorMod
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.R.id
 import io.github.ovso.systemreport.R.layout
@@ -29,11 +24,8 @@ import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
 import kotlinx.android.synthetic.main.content_main.viewpager2_main
-import timber.log.Timber
 import java.io.File
 import java.util.Scanner
-import kotlin.collections.HashMap
-import kotlin.collections.Map
 import kotlin.collections.set
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
