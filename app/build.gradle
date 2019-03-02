@@ -42,7 +42,7 @@ dependencies {
   implementation deps.androidx.appcompat
   implementation deps.androidx.material
   implementation deps.androidx.constraintlayout
-  implementation deps.androidx.ktx_core
+  implementation deps.androidx.core_ktx
   implementation deps.androidx.viewpager2
   implementation deps.androidx.paging_runtime
   implementation deps.androidx.paging_rxjava2
@@ -60,13 +60,13 @@ dependencies {
   implementation deps.timber
 
   implementation deps.glide.runtime
-  implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
-  implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
-  implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
   kapt deps.glide.compiler
 
   implementation deps.easydeviceinfo
 
+  implementation deps.androidx.lifecycle_extensions
+  implementation deps.androidx.lifecycle_viewmodel_ktx
+  implementation deps.androidx.annotation
 
   testImplementation deps.atsl.junit
   androidTestImplementation deps.atsl.runner

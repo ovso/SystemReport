@@ -7,10 +7,16 @@
     tools:context=".view.ui.main.views.BatteryFragment"
     >
 
-  <TextView
+  <androidx.core.widget.NestedScrollView
+      android:id="@+id/scrollview_battery"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:text="Batter"
-      />
-
+      >
+    <LinearLayout
+        android:id="@+id/linearlayout_battery_itemcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        />
+  </androidx.core.widget.NestedScrollView>
 </FrameLayout>

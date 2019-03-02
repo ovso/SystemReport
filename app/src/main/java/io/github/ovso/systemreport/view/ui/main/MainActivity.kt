@@ -42,21 +42,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setupBinding(savedInstanceState)
-    test()
+    //test()
   }
 
   private fun test() {
 //    var cpuInfoMap = getCpuInfoMap()
 //    var modelName = cpuInfoMap.get("model name")
-    var allSensors = EasySensorMod(this).allSensors
-
-    var battery = EasyBatteryMod(this);
-    Timber.d("batteryHealth = ${battery.batteryHealth}")
-    Timber.d("batteryPercentage = ${battery.batteryPercentage}")
-    Timber.d("batteryTechnology = ${battery.batteryTechnology}")
-    Timber.d("batteryTemperature = ${battery.batteryTemperature}")
-    Timber.d("batteryVoltage = ${battery.batteryVoltage}")
-    Timber.d("isBatteryPresent = ${battery.isBatteryPresent}")
+    //var allSensors = EasySensorMod(this).allSensors
 
   }
 
