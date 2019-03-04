@@ -1,6 +1,5 @@
 package io.github.ovso.systemreport.viewmodels.fragment
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -9,8 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import io.github.ovso.systemreport.service.model.BatteryInfo
-import android.widget.Toast
-import io.github.ovso.systemreport.view.ui.main.MainActivity
+import android.os.Build
 
 class BatteryViewModel(var context: Context) : ViewModel() {
   var batteryMod = EasyBatteryMod(context)
@@ -31,6 +29,7 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     infos.add(BatteryInfo("Capacity", getCapacity()))
     batteryMod.isDeviceCharging
 
+    print("capacity = ${getBatteryCapacity(context)}")
     for (info in infos) {
       println("${info.name} = {${info.value}}")
     }
@@ -121,6 +120,21 @@ class BatteryViewModel(var context: Context) : ViewModel() {
       }
     }
     return "Unknown"
+  }
+
+  fun getBatteryCapacity(ctx: Context): Long {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      val mBatteryManager = ctx.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
+      val chargeCounter =
+        mBatteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
+      val capacity = mBatteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+
+      if (chargeCounter != null && capacity != null) {
+        return (chargeCounter as Float / capacity as Float * 100f).toLong()
+      }
+    }
+
+    return 0
   }
 
   fun getCapacity(): String {
