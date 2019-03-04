@@ -4,17 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import io.github.ovso.systemreport.service.model.BatteryInfo
-import android.os.Build
 
 class BatteryViewModel(var context: Context) : ViewModel() {
   var batteryMod = EasyBatteryMod(context)
   var batteryInfoLiveData = MutableLiveData<ArrayList<BatteryInfo>>()
+  var batteryInfoObField = ObservableField<ArrayList<BatteryInfo>>()
   fun fetchList() {
     batteryInfoLiveData.value = provideBatteryInfos()
+    batteryInfoObField.set(provideBatteryInfos())
   }
 
   private fun provideBatteryInfos(): ArrayList<BatteryInfo>? {
@@ -26,13 +28,6 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     infos.add(BatteryInfo("Technology", getTechnology()))
     infos.add(BatteryInfo("Temperature", getTemperature()))
     infos.add(BatteryInfo("Voltage", getVoltage()))
-    infos.add(BatteryInfo("Capacity", getCapacity()))
-    batteryMod.isDeviceCharging
-
-    print("capacity = ${getBatteryCapacity(context)}")
-    for (info in infos) {
-      println("${info.name} = {${info.value}}")
-    }
     return infos
   }
 
@@ -120,62 +115,5 @@ class BatteryViewModel(var context: Context) : ViewModel() {
       }
     }
     return "Unknown"
-  }
-
-  fun getBatteryCapacity(ctx: Context): Long {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      val mBatteryManager = ctx.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-      val chargeCounter =
-        mBatteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER)
-      val capacity = mBatteryManager.getLongProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-
-      if (chargeCounter != null && capacity != null) {
-        return (chargeCounter as Float / capacity as Float * 100f).toLong()
-      }
-    }
-
-    return 0
-  }
-
-  fun getCapacity(): String {
-
-    // Power profile class instance
-    var mPowerProfile_: Any? = null
-
-    // Reset variable for battery capacity
-    var batteryCapacity = 0.0
-
-    // Power profile class name
-    val POWER_PROFILE_CLASS = "com.android.internal.os.PowerProfile"
-
-    try {
-
-      // Get power profile class and create instance. We have to do this
-      // dynamically because android.internal package is not part of public API
-      mPowerProfile_ = Class.forName(POWER_PROFILE_CLASS)
-          .getConstructor(Context::class.java)
-          .newInstance(this)
-
-    } catch (e: Exception) {
-
-      // Class not found?
-      e.printStackTrace()
-    }
-
-    try {
-
-      // Invoke PowerProfile method "getAveragePower" with param "battery.capacity"
-      batteryCapacity = Class
-          .forName(POWER_PROFILE_CLASS)
-          .getMethod("getAveragePower", java.lang.String::class.java)
-          .invoke(mPowerProfile_, "battery.capacity") as Double
-
-    } catch (e: Exception) {
-
-      // Something went wrong
-      e.printStackTrace()
-    }
-
-    return "$batteryCapacity"
   }
 }

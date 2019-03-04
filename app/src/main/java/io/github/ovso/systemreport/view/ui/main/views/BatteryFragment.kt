@@ -1,21 +1,22 @@
 package io.github.ovso.systemreport.view.ui.main.views
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import github.nisrulz.easydeviceinfo.base.ChargingVia
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import io.github.ovso.systemreport.R
+import io.github.ovso.systemreport.databinding.FragmentBatteryBinding
 import io.github.ovso.systemreport.viewmodels.fragment.BatteryViewModel
 import timber.log.Timber
 
@@ -32,12 +33,23 @@ class BatteryFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_battery, container, false)
+    return dataBinding(inflater, container)
+  }
+
+  private fun dataBinding(
+    inflater: LayoutInflater,
+    container: ViewGroup?
+  ): View {
+    setupViewModel()
+    var binding = DataBindingUtil.inflate<FragmentBatteryBinding>(
+        inflater, R.layout.fragment_battery, container, false
+    )
+    binding.viewModel = viewModel
+    return binding.root
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    setupViewModel()
     updateList()
     //output()
   }
@@ -52,7 +64,8 @@ class BatteryFragment : Fragment() {
   }
 
   private fun updateList() {
-
+    viewModel.batteryInfoLiveData.observe(this, Observer {
+    })
     viewModel.fetchList()
   }
 
