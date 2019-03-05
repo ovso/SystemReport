@@ -22,19 +22,16 @@ class MainPagerAdapter(
   override fun getItemCount() = items.size
 
   companion object {
-    private fun provideFragment(position: Int): Fragment? {
-      var f: Fragment? = null
+    private fun provideFragment(position: Int) =
       when (position) {
-        0 -> f = SocFragment.newInstance()
-        1 -> f = DeviceFragment.newInstance()
-        2 -> f = SystemFragment.newInstance()
-        3 -> f = BatteryFragment.newInstance()
-        4 -> f = SensorsFragment.newInstance()
-        5 -> f = ThermalFragment.newInstance()
+        0 -> SocFragment.newInstance()
+        1 -> DeviceFragment.newInstance()
+        2 -> SystemFragment.newInstance()
+        3 -> BatteryFragment.newInstance()
+        4 -> SensorsFragment.newInstance()
+        5 -> ThermalFragment.newInstance()
+        else -> throw RuntimeException("지원하지 않음")
       }
-      return f
-    }
   }
-
 
 }

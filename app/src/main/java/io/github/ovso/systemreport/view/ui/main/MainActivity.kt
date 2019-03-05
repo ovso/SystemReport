@@ -34,16 +34,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setupBinding(savedInstanceState)
-    //test()
   }
-
-  private fun test() {
-//    var cpuInfoMap = getCpuInfoMap()
-//    var modelName = cpuInfoMap.get("model name")
-    //var allSensors = EasySensorMod(this).allSensors
-
-  }
-
+  
   @Suppress("UNCHECKED_CAST")
   private fun setupViewModel() {
     viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
