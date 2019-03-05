@@ -17,10 +17,13 @@ import github.nisrulz.easydeviceinfo.base.ChargingVia
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentBatteryBinding
+import io.github.ovso.systemreport.view.ui.main.views.adapter.BatteryAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.BatteryViewModel
+import kotlinx.android.synthetic.main.fragment_battery.recyclerview_battery
 import timber.log.Timber
 
 class BatteryFragment : Fragment() {
+  var adapter: BatteryAdapter = BatteryAdapter()
 
   companion object {
     fun newInstance() = BatteryFragment()
@@ -50,8 +53,13 @@ class BatteryFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
+    output()
+    setupRecyclerView()
+  }
+
+  private fun setupRecyclerView() {
+    recyclerview_battery.adapter = adapter
     updateList()
-    //output()
   }
 
   @Suppress("UNCHECKED_CAST")
@@ -65,6 +73,8 @@ class BatteryFragment : Fragment() {
 
   private fun updateList() {
     viewModel.batteryInfoLiveData.observe(this, Observer {
+      adapter.addItems(it)
+      adapter.notifyDataSetChanged()
     })
     viewModel.fetchList()
   }

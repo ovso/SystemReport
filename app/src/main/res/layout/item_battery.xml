@@ -9,13 +9,13 @@
       android:orientation="horizontal"
       >
     <TextView
-        android:id="@+id/textview_battery_status_name"
+        android:id="@+id/textview_batteryviewholder_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         />
     <TextView
-        android:id="@+id/textview_battery_status_value"
+        android:id="@+id/textview_batteryviewholder_value"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
