@@ -1,5 +1,6 @@
 package io.github.ovso.systemreport.viewmodels.fragment
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -14,14 +15,23 @@ class BatteryViewModel(var context: Context) : ViewModel() {
   var batteryMod = EasyBatteryMod(context)
   var batteryInfoLiveData = MutableLiveData<ArrayList<BatteryInfo>>()
   var batteryInfoObField = ObservableField<ArrayList<BatteryInfo>>()
-  fun fetchList() {
-    batteryInfoLiveData.value = provideBatteryInfos()
-    batteryInfoObField.set(provideBatteryInfos())
+  fun fetchList(intent: Intent) {
+    batteryInfoLiveData.value = provideBatteryInfos(intent)
+    //batteryInfoObField.set(provideBatteryInfos())
   }
 
-  private fun provideBatteryInfos(): ArrayList<BatteryInfo>? {
+  init {
+    registerBattery()
+  }
+
+  private fun registerBattery() {
+    val batFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+    context.registerReceiver(broadcastReceiver, batFilter)
+  }
+
+  private fun provideBatteryInfos(intent: Intent): ArrayList<BatteryInfo>? {
     var infos = ArrayList<BatteryInfo>()
-    infos.add(BatteryInfo("Health", getHealth()))
+    infos.add(BatteryInfo("Health", getHealth(intent)))
     infos.add(BatteryInfo("Percentage", getPercentage()))
     infos.add(BatteryInfo("Power source", getCharger()))
     infos.add(BatteryInfo("Status", getStatus()))
@@ -100,20 +110,30 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     return context.registerReceiver(null, batFilter)
   }
 
-  private fun getHealth(): String {
-    val batteryStatus = getBatteryStatusIntent()
-    batteryStatus?.let {
-      var health: Int = it.getIntExtra(BatteryManager.EXTRA_HEALTH, 0)
-      when (health) {
-        BatteryManager.BATTERY_HEALTH_GOOD -> return "Good"
-        BatteryManager.BATTERY_HEALTH_COLD -> return "Cold"
-        BatteryManager.BATTERY_HEALTH_DEAD -> return "Dead"
-        BatteryManager.BATTERY_HEALTH_OVERHEAT -> return "Overheat"
-        BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> return "Over voltage"
-        BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> return "Unspecified failure"
-        else -> return "Unknown" // BatteryManager.BATTERY_HEALTH_UNKNOWN
-      }
+  var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+    override fun onReceive(
+      context: Context?,
+      intent: Intent?
+    ) {
+      fetchList(intent!!)
     }
-    return "Unknown"
+  }
+
+  private fun getHealth(intent: Intent): String {
+    var health: Int = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0)
+    when (health) {
+      BatteryManager.BATTERY_HEALTH_GOOD -> return "Good"
+      BatteryManager.BATTERY_HEALTH_COLD -> return "Cold"
+      BatteryManager.BATTERY_HEALTH_DEAD -> return "Dead"
+      BatteryManager.BATTERY_HEALTH_OVERHEAT -> return "Overheat"
+      BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> return "Over voltage"
+      BatteryManager.BATTERY_HEALTH_UNSPECIFIED_FAILURE -> return "Unspecified failure"
+      else -> return "Unknown" // BatteryManager.BATTERY_HEALTH_UNKNOWN
+    }
+  }
+
+  override fun onCleared() {
+    super.onCleared()
+    context.unregisterReceiver(broadcastReceiver)
   }
 }
