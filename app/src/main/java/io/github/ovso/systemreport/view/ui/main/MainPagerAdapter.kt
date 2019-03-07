@@ -1,37 +1,34 @@
 package io.github.ovso.systemreport.view.ui.main
 
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import io.github.ovso.systemreport.view.ui.main.views.BatteryFragment
-import io.github.ovso.systemreport.view.ui.main.views.DeviceFragment
-import io.github.ovso.systemreport.view.ui.main.views.SensorsFragment
-import io.github.ovso.systemreport.view.ui.main.views.SocFragment
-import io.github.ovso.systemreport.view.ui.main.views.SystemFragment
-import io.github.ovso.systemreport.view.ui.main.views.ThermalFragment
-import io.github.ovso.systemreport.viewmodels.MainViewModel
+import androidx.fragment.app.FragmentPagerAdapter
 
 class MainPagerAdapter(
-  private var viewModel: MainViewModel,
   fragmentManager: FragmentManager
-) : FragmentStateAdapter(fragmentManager) {
-  override fun getItem(position: Int): Fragment = provideFragment(position)!!
+) : FragmentPagerAdapter(fragmentManager) {
 
-  var items = arrayListOf<String>()
+  var items = ArrayList<Fragment>()
+  var titles = ArrayList<String>()
 
-  override fun getItemCount() = items.size
+  override fun getCount() = items.size
 
-  companion object {
-    private fun provideFragment(position: Int) =
-      when (position) {
-        0 -> SocFragment.newInstance()
-        1 -> DeviceFragment.newInstance()
-        2 -> SystemFragment.newInstance()
-        3 -> BatteryFragment.newInstance()
-        4 -> SensorsFragment.newInstance()
-        5 -> ThermalFragment.newInstance()
-        else -> throw RuntimeException("지원하지 않음")
-      }
+  override fun getItem(position: Int): Fragment = items.get(position)
+
+  override fun getPageTitle(position: Int) = titles.get(position)
+
+  override fun destroyItem(
+    container: ViewGroup,
+    position: Int,
+    `object`: Any
+  ) {
+    if (position >= count) {
+      val manager = (`object` as Fragment).fragmentManager
+      val trans = manager!!.beginTransaction()
+      trans.remove(`object`)
+      trans.commit()
+    }
   }
 
 }

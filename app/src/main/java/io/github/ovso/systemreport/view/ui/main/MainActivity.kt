@@ -8,34 +8,40 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.PagerAdapter
 import com.google.android.material.navigation.NavigationView
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.R.id
 import io.github.ovso.systemreport.R.layout
 import io.github.ovso.systemreport.R.string
 import io.github.ovso.systemreport.databinding.ActivityMainBinding
+import io.github.ovso.systemreport.view.ui.main.views.BatteryFragment
+import io.github.ovso.systemreport.view.ui.main.views.DeviceFragment
+import io.github.ovso.systemreport.view.ui.main.views.SensorsFragment
+import io.github.ovso.systemreport.view.ui.main.views.SocFragment
+import io.github.ovso.systemreport.view.ui.main.views.SystemFragment
+import io.github.ovso.systemreport.view.ui.main.views.ThermalFragment
 import io.github.ovso.systemreport.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
-import kotlinx.android.synthetic.main.content_main.viewpager2_main
+import kotlinx.android.synthetic.main.content_main.viewpager_main
 import java.io.File
 import java.util.Scanner
 import kotlin.collections.set
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var viewModel: MainViewModel? = null
-  private var adapter: MainPagerAdapter? = null
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setupBinding(savedInstanceState)
   }
-  
+
   @Suppress("UNCHECKED_CAST")
   private fun setupViewModel() {
     viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
@@ -71,7 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         layout.activity_main
     )
     binding.viewModel = viewModel
-    setupAdapter();
+    setupViewPager()
     setupToolbar()
     setupDrawerLayout()
     setupNavigation()
@@ -79,24 +85,41 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     updatePagerList()
   }
 
-  private fun setupAdapter() {
-    adapter = MainPagerAdapter(viewModel!!, supportFragmentManager)
-    viewpager2_main.adapter = adapter
+  private fun setupViewPager() {
+    viewpager_main.adapter = provideAdapter()
+    tablayout_main.setupWithViewPager(viewpager_main)
+  }
+
+  private fun provideAdapter(): PagerAdapter {
+    var fragments = provideFragments()
+    var adapter = MainPagerAdapter(supportFragmentManager)
+    adapter!!.items = fragments
+    adapter!!.titles = provideTitles(fragments.size);
+    return adapter
+  }
+
+  private fun provideTitles(size: Int): ArrayList<String> {
+    val titles = ArrayList<String>()
+    for (i in IntRange(0, size - 1)) {
+      var title = resources.getStringArray(R.array.info_type)
+          .get(i)
+      titles.add(title)
+    }
+    return titles
+  }
+
+  fun provideFragments(): ArrayList<Fragment> {
+    var fragments = ArrayList<Fragment>()
+    fragments.add(SocFragment.newInstance())
+    fragments.add(DeviceFragment.newInstance())
+    fragments.add(SystemFragment.newInstance())
+    fragments.add(BatteryFragment.newInstance())
+    fragments.add(SensorsFragment.newInstance())
+    fragments.add(ThermalFragment.newInstance())
+    return fragments
   }
 
   private fun updatePagerList() {
-    viewModel?.itemsLiveData?.observe(this, Observer {
-      adapter?.items = it
-      adapter?.notifyDataSetChanged()
-    })
-    viewModel?.titlesLiveData?.observe(this, Observer {
-      for (title in it) {
-        var newTab = tablayout_main.newTab()
-        newTab.text = title
-        tablayout_main.addTab(newTab)
-      }
-    })
-    viewModel?.fetchList()
   }
 
   override fun onBackPressed() {

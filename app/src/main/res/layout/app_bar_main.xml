@@ -35,8 +35,6 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:overScrollMode="always"
-          app:currentItem="@{viewModel.selectedObField.get()}"
-          app:onTabSelectedListener="@{viewModel.simpleOnTabSelectedListener}"
           app:tabGravity="center"
           app:tabMode="scrollable"
           />

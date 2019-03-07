@@ -1,6 +1,7 @@
 package io.github.ovso.systemreport.view.ui.main.views
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -76,7 +77,7 @@ class BatteryFragment : Fragment() {
       adapter.addItems(it)
       adapter.notifyDataSetChanged()
     })
-    viewModel.fetchList()
+    //viewModel.fetchList()
   }
 
   @SuppressLint("WrongConstant")

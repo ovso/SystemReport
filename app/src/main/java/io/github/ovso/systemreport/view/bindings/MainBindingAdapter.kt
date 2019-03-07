@@ -5,12 +5,13 @@ import com.google.android.material.tabs.TabLayout
 
 object MainBindingAdapter {
 
+/*
   @JvmStatic
   @BindingAdapter("bind:currentItem") fun currentItem(
     tabLayout: TabLayout,
     index: Int
   ) {
-    tabLayout.getTabAt(index)
-        ?.select()
+    tabLayout.selectTab(tabLayout.getTabAt(index))
   }
+*/
 }

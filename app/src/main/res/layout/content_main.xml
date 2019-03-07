@@ -12,12 +12,10 @@
         type="io.github.ovso.systemreport.viewmodels.MainViewModel"
         />
   </data>
-  <androidx.viewpager2.widget.ViewPager2
-      android:id="@+id/viewpager2_main"
+  <androidx.viewpager.widget.ViewPager
+      android:id="@+id/viewpager_main"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      app:currentItem="@{viewModel.selectedObField.get()}"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      app:registerOnPageChangeCallback="@{viewModel.onPageChangeCallback}"
       />
 </layout>
