@@ -1,7 +1,6 @@
 package io.github.ovso.systemreport.view.ui.main.views
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,7 +53,6 @@ class BatteryFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    output()
     setupRecyclerView()
   }
 
@@ -77,27 +75,7 @@ class BatteryFragment : Fragment() {
       adapter.addItems(it)
       adapter.notifyDataSetChanged()
     })
-    //viewModel.fetchList()
-  }
-
-  @SuppressLint("WrongConstant")
-  private fun output() {
-    var battery = EasyBatteryMod(context);
-    var infos = arrayListOf<String>()
-    infos.add("batteryHealth = ${battery.batteryHealth}")
-    infos.add("batteryPercentage = ${battery.batteryPercentage}")
-    infos.add("batteryTechnology = ${battery.batteryTechnology}")
-    infos.add("batteryTemperature = ${battery.batteryTemperature}")
-    infos.add("batteryVoltage = ${battery.batteryVoltage}")
-    infos.add("chargingSource = ${battery.chargingSource}")
-    for (info in infos) {
-      Timber.d("info = %s", info)
-      var view = TextView(context)
-      view.setText(info)
-      view.layoutParams = LayoutParams(
-          LayoutParams.MATCH_PARENT, resources.getDimensionPixelSize(R.dimen.all_text_item_56)
-      )
-    }
+    viewModel.fetchList()
   }
 
   enum class ChargingPlug(var source: Int) {

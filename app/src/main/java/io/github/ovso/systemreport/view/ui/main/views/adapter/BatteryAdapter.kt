@@ -26,10 +26,9 @@ class BatteryAdapter : RecyclerView.Adapter<BatteryViewHolder>() {
 
   private fun getItem(position: Int) = items.get(position)
 
-  fun addItems(it: ArrayList<BatteryInfo>?) {
-    it?.let {
-      items.addAll(it)
-    }
+  fun addItems(it: ArrayList<BatteryInfo>) {
+    this.items.clear()
+    this.items.addAll(it)
   }
 
 }
