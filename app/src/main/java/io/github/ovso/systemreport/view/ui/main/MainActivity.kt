@@ -8,23 +8,15 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager.widget.PagerAdapter
 import com.google.android.material.navigation.NavigationView
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.R.id
 import io.github.ovso.systemreport.R.layout
 import io.github.ovso.systemreport.R.string
 import io.github.ovso.systemreport.databinding.ActivityMainBinding
-import io.github.ovso.systemreport.view.ui.main.views.BatteryFragment
-import io.github.ovso.systemreport.view.ui.main.views.DeviceFragment
-import io.github.ovso.systemreport.view.ui.main.views.SensorsFragment
-import io.github.ovso.systemreport.view.ui.main.views.SocFragment
-import io.github.ovso.systemreport.view.ui.main.views.SystemFragment
-import io.github.ovso.systemreport.view.ui.main.views.ThermalFragment
 import io.github.ovso.systemreport.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
@@ -76,50 +68,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         this,
         layout.activity_main
     )
-    binding.viewModel = viewModel
+
+    if (savedInstanceState == null) {
+      binding.viewModel = viewModel
+    }
+
     setupViewPager()
     setupToolbar()
     setupDrawerLayout()
     setupNavigation()
-
-    updatePagerList()
   }
 
   private fun setupViewPager() {
-    viewpager_main.adapter = provideAdapter()
+    viewpager_main.adapter =
+      MainPagerAdapter(supportFragmentManager, resources.getStringArray(R.array.page_titles))
     tablayout_main.setupWithViewPager(viewpager_main)
-  }
-
-  private fun provideAdapter(): PagerAdapter {
-    var fragments = provideFragments()
-    var adapter = MainPagerAdapter(supportFragmentManager)
-    adapter!!.items = fragments
-    adapter!!.titles = provideTitles(fragments.size);
-    return adapter
-  }
-
-  private fun provideTitles(size: Int): ArrayList<String> {
-    val titles = ArrayList<String>()
-    for (i in IntRange(0, size - 1)) {
-      var title = resources.getStringArray(R.array.info_type)
-          .get(i)
-      titles.add(title)
-    }
-    return titles
-  }
-
-  fun provideFragments(): ArrayList<Fragment> {
-    var fragments = ArrayList<Fragment>()
-    fragments.add(SocFragment.newInstance())
-    fragments.add(DeviceFragment.newInstance())
-    fragments.add(SystemFragment.newInstance())
-    fragments.add(BatteryFragment.newInstance())
-    fragments.add(SensorsFragment.newInstance())
-    fragments.add(ThermalFragment.newInstance())
-    return fragments
-  }
-
-  private fun updatePagerList() {
   }
 
   override fun onBackPressed() {
@@ -171,24 +134,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     drawer_layout.closeDrawer(GravityCompat.START)
     return true
-  }
-
-  fun getCpuInfoMap(): Map<String, String> {
-    val map = HashMap<String, String>()
-    try {
-      val s = Scanner(File("/proc/cpuinfo"))
-      while (s.hasNextLine()) {
-        val vals = s.nextLine()
-            .split(": ")
-        if (vals.size > 1) {
-          map[vals[0].trim({ it <= ' ' })] = vals[1].trim({ it <= ' ' })
-        }
-      }
-    } catch (e: Exception) {
-      //Log.e("getCpuInfoMap", Log.getStackTraceString(e))
-    }
-
-    return map
   }
 
   fun printDeviceInfo() {

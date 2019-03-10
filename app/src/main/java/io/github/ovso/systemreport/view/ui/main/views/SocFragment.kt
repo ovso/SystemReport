@@ -9,6 +9,8 @@ import android.view.ViewGroup
 
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.viewmodels.fragment.SocViewModel
+import java.io.File
+import java.util.Scanner
 
 class SocFragment : Fragment() {
 
@@ -31,6 +33,25 @@ class SocFragment : Fragment() {
     viewModel = ViewModelProviders.of(this)
         .get(SocViewModel::class.java)
     // TODO: Use the ViewModel
+  }
+
+
+  fun getCpuInfoMap(): Map<String, String> {
+    val map = HashMap<String, String>()
+    try {
+      val s = Scanner(File("/proc/cpuinfo"))
+      while (s.hasNextLine()) {
+        val vals = s.nextLine()
+            .split(": ")
+        if (vals.size > 1) {
+          map[vals[0].trim({ it <= ' ' })] = vals[1].trim({ it <= ' ' })
+        }
+      }
+    } catch (e: Exception) {
+      //Log.e("getCpuInfoMap", Log.getStackTraceString(e))
+    }
+
+    return map
   }
 
 }
