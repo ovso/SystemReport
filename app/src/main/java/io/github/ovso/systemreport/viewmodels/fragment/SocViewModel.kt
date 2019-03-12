@@ -6,34 +6,22 @@ import androidx.lifecycle.ViewModel
 import io.github.ovso.systemreport.service.model.SocInfo
 import io.github.ovso.systemreport.view.ui.main.CMDExecute
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.toObservable
-import timber.log.Timber
 
 class SocViewModel(context: Context) : ViewModel() {
   private var compositeDisposable: CompositeDisposable = CompositeDisposable()
   var socInfoLiveData = MutableLiveData<ArrayList<SocInfo>>()
 
   fun fechList() {
-    var toObservable = CMDExecute().run2()
-        .iterator()
-        .toObservable()
-        .map { t -> {
-          Timber.d("dddddd")
-        } }.subscribe()
-
-    //socInfoLiveData.value = provideSocInfos()
-    //var run2 = CMDExecute().run2()
-
-    Timber.d("cpu architecture = " + System.getProperty("os.arch"))
+    socInfoLiveData.value = provideSocInfos()
   }
 
   private fun provideSocInfos(): ArrayList<SocInfo>? {
     val infos = ArrayList<SocInfo>()
-    var toObservable = CMDExecute().run2()
-        .iterator()
-        .toObservable()
-        .map { }
-
+    var infoMap = CMDExecute().run2()
+    for (entry in CMDExecute().run2()) {
+      infos.add(SocInfo(entry.key, entry.value))
+    }
+    infos.add(SocInfo("Architecture", System.getProperty("os.arch")!!))
     return infos
   }
 }
