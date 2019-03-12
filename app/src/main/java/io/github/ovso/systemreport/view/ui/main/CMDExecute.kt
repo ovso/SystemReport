@@ -1,5 +1,6 @@
 package io.github.ovso.systemreport.view.ui.main
 
+import io.reactivex.Observable
 import timber.log.Timber
 import java.io.IOException
 import java.io.BufferedReader
@@ -17,13 +18,9 @@ class CMDExecute {
       val inputStream = process.inputStream
       val bytes = ByteArray(1024)
       while (inputStream.read(bytes) != -1) {
-        var string = String(bytes)
+        val string = String(bytes)
         result.append(string)
-        var infos = string.split("\n")
-        for (info in infos) {
-          var split = info.split(":")
-          Timber.d("split = " + split)
-        }
+        Timber.d(string)
         Timber.d("-------------------------------------")
       }
       inputStream.close()
@@ -38,11 +35,11 @@ class CMDExecute {
     val br = BufferedReader(FileReader("/proc/cpuinfo"))
     var str: String? = null
     val output = HashMap<String, String>()
-    fun read(): String? {
+    fun readLine(): String? {
       str = br.readLine()
       return str
     }
-    while (read() != null) {
+    while (readLine() != null) {
       val data = str!!.split(":".toRegex())
           .dropLastWhile { it.isEmpty() }
           .toTypedArray()
