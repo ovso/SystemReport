@@ -10,6 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 class SocViewModel(context: Context) : ViewModel() {
   private var compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -21,6 +22,8 @@ class SocViewModel(context: Context) : ViewModel() {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe()
+
+    Timber.d(CMDExecute().run2().toString())
     //socInfoLiveData.value = provideSocInfos()
   }
 
