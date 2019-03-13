@@ -10,7 +10,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_battery.textview_batteryviewholder_name
 import kotlinx.android.synthetic.main.item_battery.textview_batteryviewholder_value
 
-class BatteryViewHolder(
+class AllViewHolder(
   override val containerView: View?
 ) : RecyclerView.ViewHolder(containerView!!), LayoutContainer {
 
@@ -20,10 +20,10 @@ class BatteryViewHolder(
   }
 
   companion object {
-    fun create(parent: ViewGroup): BatteryViewHolder {
+    fun create(parent: ViewGroup): AllViewHolder {
       var view = LayoutInflater.from(parent.context)
           .inflate(R.layout.item_battery, parent, false)
-      return BatteryViewHolder(view)
+      return AllViewHolder(view)
     }
   }
 }

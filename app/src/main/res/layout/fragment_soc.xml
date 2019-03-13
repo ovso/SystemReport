@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     >
   <data>
     <variable
@@ -8,10 +9,37 @@
         type="io.github.ovso.systemreport.viewmodels.fragment.SocViewModel"
         />
   </data>
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recyclerview_soc"
+  <androidx.core.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-      />
+      >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+      <com.google.android.material.card.MaterialCardView
+          android:layout_width="match_parent"
+          android:layout_height="?android:attr/actionBarSize"
+          >
+        <TextView
+            android:id="@+id/textview_soc_cpuname"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@{viewModel.cpuNameObField.get()}"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="italic|bold"
+            tools:text="Intel(R) Core(TM) i7-7700HQ CPU"
+            />
+      </com.google.android.material.card.MaterialCardView>
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/recyclerview_soc"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+          />
+    </LinearLayout>
+  </androidx.core.widget.NestedScrollView>
 </layout>
