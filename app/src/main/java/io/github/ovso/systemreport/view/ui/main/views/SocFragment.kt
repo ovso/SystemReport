@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -62,14 +63,18 @@ class SocFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     setupRecyclerView()
+    updateList()
   }
 
   private fun setupRecyclerView() {
     recyclerview_soc.adapter = SocAdapter()
-    updateList()
   }
 
   private fun updateList() {
+    viewModel.socInfoLiveData.observe(this, Observer {
+      var socAdapter = recyclerview_soc.adapter as SocAdapter
+      socAdapter.addItems(it)
+    })
     viewModel.fechList()
   }
 
