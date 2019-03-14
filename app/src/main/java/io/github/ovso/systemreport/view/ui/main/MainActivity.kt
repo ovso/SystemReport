@@ -1,6 +1,5 @@
 package io.github.ovso.systemreport.view.ui.main
 
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -23,9 +22,6 @@ import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
 import kotlinx.android.synthetic.main.content_main.viewpager_main
-import java.io.File
-import java.util.Scanner
-import kotlin.collections.set
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var viewModel: MainViewModel? = null
@@ -134,23 +130,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     drawer_layout.closeDrawer(GravityCompat.START)
     return true
-  }
-
-  fun printDeviceInfo() {
-    println("MODEL: " + Build.MODEL);
-    println("ID: " + Build.ID);
-    println("Manufacture: " + Build.MANUFACTURER);
-    println("brand: " + Build.BRAND);
-    println("type: " + Build.TYPE);
-    println("user: " + Build.USER);
-    println("BASE: " + Build.VERSION_CODES.BASE);
-    println("INCREMENTAL " + Build.VERSION.INCREMENTAL);
-    println("SDK  " + Build.VERSION.SDK);
-    println("BOARD: " + Build.BOARD);
-    println("BRAND " + Build.BRAND);
-    println("HOST " + Build.HOST);
-    println("FINGERPRINT: " + Build.FINGERPRINT);
-    println("Version Code: " + Build.VERSION.RELEASE);
-
   }
 }

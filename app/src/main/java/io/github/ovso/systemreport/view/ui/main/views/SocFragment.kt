@@ -77,5 +77,4 @@ class SocFragment : Fragment() {
     })
     viewModel.fechList()
   }
-
 }
