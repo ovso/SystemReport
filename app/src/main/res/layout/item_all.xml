@@ -10,7 +10,7 @@
       android:orientation="horizontal"
       >
     <TextView
-        android:id="@+id/textview_batteryviewholder_name"
+        android:id="@+id/textview_allviewholder_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -18,18 +18,18 @@
         android:paddingEnd="0dp"
         android:paddingStart="16dp"
         android:textColor="@android:color/darker_gray"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Health"
         />
     <TextView
-        android:id="@+id/textview_batteryviewholder_value"
+        android:id="@+id/textview_allviewholder_value"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center_vertical"
         android:paddingEnd="0dp"
-        android:paddingStart="16dp"
+        android:paddingStart="5dp"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         tools:text="GOOD"

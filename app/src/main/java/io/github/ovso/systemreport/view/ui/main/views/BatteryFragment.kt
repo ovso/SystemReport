@@ -1,26 +1,20 @@
 package io.github.ovso.systemreport.view.ui.main.views
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import github.nisrulz.easydeviceinfo.base.ChargingVia
-import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentBatteryBinding
 import io.github.ovso.systemreport.view.ui.main.views.adapter.BatteryAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.BatteryViewModel
 import kotlinx.android.synthetic.main.fragment_battery.recyclerview_battery
-import timber.log.Timber
 
 class BatteryFragment : Fragment() {
   var adapter: BatteryAdapter = BatteryAdapter()
@@ -76,25 +70,6 @@ class BatteryFragment : Fragment() {
       adapter.notifyDataSetChanged()
     })
     viewModel.fetchList()
-  }
-
-  enum class ChargingPlug(var source: Int) {
-    AC(ChargingVia.AC),
-    USB(ChargingVia.USB),
-    WIRELESS(ChargingVia.WIRELESS),
-    UNKNOWN(ChargingVia.UNKNOWN_SOURCE);
-
-    companion object {
-      fun fromSource(source: Int): ChargingPlug {
-        for (value in values()) {
-          if (value.source == source) {
-            return value
-          }
-        }
-        return UNKNOWN
-      }
-
-    }
   }
 
 }

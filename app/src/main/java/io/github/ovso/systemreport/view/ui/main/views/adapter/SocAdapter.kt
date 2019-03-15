@@ -2,23 +2,23 @@ package io.github.ovso.systemreport.view.ui.main.views.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.github.ovso.systemreport.service.model.BatteryInfo
+import io.github.ovso.systemreport.service.model.SocInfo
 
-class BatteryAdapter : RecyclerView.Adapter<AllViewHolder>() {
+class SocAdapter : RecyclerView.Adapter<SocViewHolder>() {
 
-  var items = ArrayList<BatteryInfo>()
+  var items = ArrayList<SocInfo>()
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ): AllViewHolder {
-    return AllViewHolder.create(parent);
+  ): SocViewHolder {
+    return SocViewHolder.create(parent);
   }
 
   override fun getItemCount() = items.size
 
   override fun onBindViewHolder(
-    holder: AllViewHolder,
+    holder: SocViewHolder,
     position: Int
   ) {
     holder.bind(getItem(position))
@@ -26,7 +26,7 @@ class BatteryAdapter : RecyclerView.Adapter<AllViewHolder>() {
 
   private fun getItem(position: Int) = items.get(position)
 
-  fun addItems(it: ArrayList<BatteryInfo>) {
+  fun addItems(it: ArrayList<SocInfo>) {
     this.items.clear()
     this.items.addAll(it)
   }
