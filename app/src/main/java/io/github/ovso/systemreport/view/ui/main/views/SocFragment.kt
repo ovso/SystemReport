@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentSocBinding
-import io.github.ovso.systemreport.view.ui.main.views.adapter.SocAdapter
+import io.github.ovso.systemreport.view.ui.main.views.adapter.NormalAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.SocViewModel
 import kotlinx.android.synthetic.main.fragment_soc.recyclerview_soc
 
@@ -67,12 +67,12 @@ class SocFragment : Fragment() {
   }
 
   private fun setupRecyclerView() {
-    recyclerview_soc.adapter = SocAdapter()
+    recyclerview_soc.adapter = NormalAdapter()
   }
 
   private fun updateList() {
     viewModel.socInfoLiveData.observe(this, Observer {
-      var socAdapter = recyclerview_soc.adapter as SocAdapter
+      var socAdapter = recyclerview_soc.adapter as NormalAdapter
       socAdapter.addItems(it)
     })
     viewModel.fechList()

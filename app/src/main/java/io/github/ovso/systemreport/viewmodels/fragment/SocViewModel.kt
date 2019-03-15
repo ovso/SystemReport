@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.github.ovso.systemreport.service.model.SocInfo
+import io.github.ovso.systemreport.service.model.NormalInfo
 import io.github.ovso.systemreport.utils.Devices
 import io.github.ovso.systemreport.view.ui.main.CMDExecute
 import timber.log.Timber
 
 class SocViewModel(context: Context) : ViewModel() {
-  var socInfoLiveData = MutableLiveData<ArrayList<SocInfo>>()
+  var socInfoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
   var cpuNameObField = ObservableField<String>()
   fun fechList() {
     cpuNameObField.set(CMDExecute().run2()["cpu_model"])
@@ -20,13 +20,13 @@ class SocViewModel(context: Context) : ViewModel() {
     Timber.d(Devices.ReadCPUinfo())
   }
 
-  private fun provideSocInfos(): ArrayList<SocInfo>? {
-    val infos = ArrayList<SocInfo>()
-    infos.add(SocInfo("Architecture", System.getProperty("os.arch")!!))
+  private fun provideSocInfos(): ArrayList<NormalInfo>? {
+    val infos = ArrayList<NormalInfo>()
+    infos.add(NormalInfo("Architecture", System.getProperty("os.arch")!!))
     var run2 = CMDExecute().run2()
     for (entry in run2) {
       if (checkAddToList(entry.key)) {
-        infos.add(SocInfo(entry.key, entry.value))
+        infos.add(NormalInfo(entry.key, entry.value))
       }
     }
 

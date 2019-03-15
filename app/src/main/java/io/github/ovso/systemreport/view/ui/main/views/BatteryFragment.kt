@@ -12,12 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentBatteryBinding
-import io.github.ovso.systemreport.view.ui.main.views.adapter.BatteryAdapter
+import io.github.ovso.systemreport.view.ui.main.views.adapter.NormalAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.BatteryViewModel
 import kotlinx.android.synthetic.main.fragment_battery.recyclerview_battery
 
 class BatteryFragment : Fragment() {
-  var adapter: BatteryAdapter = BatteryAdapter()
+  var adapter = NormalAdapter()
 
   companion object {
     fun newInstance() = BatteryFragment()

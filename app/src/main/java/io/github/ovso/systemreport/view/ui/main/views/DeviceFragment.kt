@@ -1,14 +1,21 @@
 package io.github.ovso.systemreport.view.ui.main.views
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
+import io.github.ovso.systemreport.databinding.FragmentDeviceBinding
+import io.github.ovso.systemreport.view.ui.main.views.adapter.NormalAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.DeviceViewModel
+import kotlinx.android.synthetic.main.fragment_device.recyclerview_device
 
 class DeviceFragment : Fragment() {
 
@@ -23,14 +30,39 @@ class DeviceFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_device, container, false)
+    return dataBinding(inflater, container)
+  }
+
+  private fun dataBinding(
+    inflater: LayoutInflater,
+    container: ViewGroup?
+  ): View? {
+    val dataBinding: FragmentDeviceBinding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_device, container, false)
+    dataBinding.viewModel = provideViewModel()
+    return dataBinding.root
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  private fun provideViewModel(): DeviceViewModel {
+    viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+      override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+        DeviceViewModel(context!!) as T
+    })
+        .get(DeviceViewModel::class.java)
+    return viewModel
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    viewModel = ViewModelProviders.of(this)
-        .get(DeviceViewModel::class.java)
-    // TODO: Use the ViewModel
+    setup()
   }
 
+  private fun setup() {
+    recyclerview_device.adapter = NormalAdapter()
+    viewModel.infoLiveData.observe(this, Observer {
+      (recyclerview_device.adapter as NormalAdapter).items.addAll(it)
+    })
+    viewModel.fetchList();
+  }
 }
