@@ -1,10 +1,16 @@
 package io.github.ovso.systemreport.viewmodels.fragment
 
 import android.content.Context
+import android.graphics.Point
+import android.util.DisplayMetrics
+import android.view.Display
+import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyDeviceMod
 import io.github.ovso.systemreport.service.model.NormalInfo
+import timber.log.Timber
+import java.math.BigDecimal
 
 class DeviceViewModel(var context: Context) : ViewModel() {
   val infoLiveData = MutableLiveData<List<NormalInfo>>()
@@ -37,6 +43,37 @@ class DeviceViewModel(var context: Context) : ViewModel() {
     infos.add(NormalInfo("radioVer", easyDeviceMod.radioVer))
     infos.add(NormalInfo("serial", easyDeviceMod.serial))
     infos.add(NormalInfo("buildTime", easyDeviceMod.buildTime.toString()))
+    //infos.add(NormalInfo("Screen inches", getScreenInches()))
+    infos.add(NormalInfo("Resolution", getResolution()))
     return infos
   }
+
+  private fun getResolution(): String {
+    var windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val d = windowManager.getDefaultDisplay()
+    val metrics = DisplayMetrics()
+    d.getMetrics(metrics)
+    var widthPixels = metrics.widthPixels
+    var heightPixels = metrics.heightPixels
+    try {
+      val realSize = Point()
+      Display::class.java.getMethod("getRealSize", Point::class.java)
+          .invoke(d, realSize)
+      widthPixels = realSize.x
+      heightPixels = realSize.y
+    } catch (e: Exception) {
+      Timber.e(e)
+    }
+
+    val x = Math.pow(widthPixels.toDouble() / metrics.xdpi, 2.0)
+    val y = Math.pow(heightPixels.toDouble() / metrics.ydpi, 2.0)
+    val screenInches = Math.sqrt(x + y)
+    var roundTo2DecimalPlaces = screenInches.roundTo2DecimalPlaces()
+
+    return "$widthPixels x $heightPixels ($roundTo2DecimalPlaces inches)"
+  }
+
+  fun Double.roundTo2DecimalPlaces() =
+    BigDecimal(this).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+
 }

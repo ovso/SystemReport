@@ -17,7 +17,6 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
 
 class SystemViewModel(var context: Context) : ViewModel() {
