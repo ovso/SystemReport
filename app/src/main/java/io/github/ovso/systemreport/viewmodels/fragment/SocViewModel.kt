@@ -14,10 +14,7 @@ class SocViewModel(context: Context) : ViewModel() {
   var cpuNameObField = ObservableField<String>()
   fun fechList() {
     cpuNameObField.set(CMDExecute().run2()["cpu_model"])
-    Timber.d(CMDExecute().run2().toString())
     socInfoLiveData.value = provideSocInfos()
-
-    Timber.d(Devices.ReadCPUinfo())
   }
 
   private fun provideSocInfos(): ArrayList<NormalInfo>? {

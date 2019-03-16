@@ -24,11 +24,7 @@ class DeviceViewModel(var context: Context) : ViewModel() {
     infos.add(NormalInfo("Display ID", easyDeviceMod.screenDisplayID))
     infos.add(NormalInfo("Fingerprint", easyDeviceMod.fingerprint))
     infos.add(NormalInfo("Build brand", easyDeviceMod.buildBrand))
-    infos.add(NormalInfo("Bootloader", easyDeviceMod.bootloader))
     infos.add(NormalInfo("Build host", easyDeviceMod.buildHost))
-    infos.add(NormalInfo("buildID", easyDeviceMod.buildID))
-    infos.add(NormalInfo("buildTags", easyDeviceMod.buildTags))
-    infos.add(NormalInfo("buildUser", easyDeviceMod.buildUser))
     infos.add(NormalInfo("buildVersionCodename", easyDeviceMod.buildVersionCodename))
     infos.add(NormalInfo("buildVersionIncremental", easyDeviceMod.buildVersionIncremental))
     infos.add(NormalInfo("buildVersionRelease", easyDeviceMod.buildVersionRelease))
@@ -41,8 +37,6 @@ class DeviceViewModel(var context: Context) : ViewModel() {
     infos.add(NormalInfo("radioVer", easyDeviceMod.radioVer))
     infos.add(NormalInfo("serial", easyDeviceMod.serial))
     infos.add(NormalInfo("buildTime", easyDeviceMod.buildTime.toString()))
-    infos.add(NormalInfo("buildVersionSDK", easyDeviceMod.buildVersionSDK.toString()))
-    infos.add(NormalInfo("isDeviceRooted", easyDeviceMod.isDeviceRooted.toString()))
     return infos
   }
 }

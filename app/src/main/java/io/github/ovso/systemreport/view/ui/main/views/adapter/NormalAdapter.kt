@@ -44,6 +44,7 @@ class NormalAdapter : RecyclerView.Adapter<NormalViewHolder>() {
 
     fun bind(item: NormalInfo) {
       textview_allviewholder_name.text = item.name
+      textview_allviewholder_name.isSelected = true
       textview_allviewholder_value.text = item.value
       textview_allviewholder_value.isSelected = true
     }
