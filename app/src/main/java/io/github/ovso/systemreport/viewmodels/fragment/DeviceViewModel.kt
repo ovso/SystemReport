@@ -21,20 +21,6 @@ class DeviceViewModel(var context: Context) : ViewModel() {
 
   fun fetchList() {
     infoLiveData.value = provideInfos()
-    storage()
-  }
-
-  private fun storage() {
-
-    val stat = StatFs(Environment.getExternalStorageDirectory().getPath())
-    val bytesAvailable: Long
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-      bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
-    } else {
-      bytesAvailable = stat.blockSize.toLong() * stat.availableBlocks.toLong()
-    }
-    val megAvailable = bytesAvailable / (1024 * 1024)
-    Timber.e("Available MB : $megAvailable")
   }
 
   private fun provideInfos(): List<NormalInfo>? {
@@ -44,6 +30,7 @@ class DeviceViewModel(var context: Context) : ViewModel() {
     Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.availableInternalMemorySize).toString())
     Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalExternalMemorySize).toString())
     Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalInternalMemorySize).toString())
+    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalRAM).toString())
     Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalRAM).toString())
 
     val infos = ArrayList<NormalInfo>()
@@ -58,7 +45,15 @@ class DeviceViewModel(var context: Context) : ViewModel() {
     infos.add(NormalInfo("Screen density", getDensity()))
     infos.add(NormalInfo("Internal storage", getInternalStorage()))
     infos.add(NormalInfo("Available storage", getAvailableStorage()))
+    infos.add(NormalInfo("Total RAM", getTotalRam()))
     return infos
+  }
+
+  private fun getTotalRam(): String {
+    val easyMemoryMod = EasyMemoryMod(context)
+    return easyMemoryMod.convertToGb(
+        easyMemoryMod.totalRAM
+    ).toDouble().roundTo2DecimalPlaces().toString() + " GB"
   }
 
   private fun getAvailableStorage(): String {
