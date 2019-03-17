@@ -8,13 +8,13 @@ import android.os.BatteryManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
-import io.github.ovso.systemreport.service.model.BatteryInfo
+import io.github.ovso.systemreport.service.model.NormalInfo
 
 class BatteryViewModel(var context: Context) : ViewModel() {
   var batteryMod = EasyBatteryMod(context)
-  var batteryInfoLiveData = MutableLiveData<ArrayList<BatteryInfo>>()
+  var batteryInfoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
   fun changeBattery(intent: Intent) {
-    batteryInfoLiveData.value = provideBatteryInfos(intent)
+    batteryInfoLiveData.value = provideNormalInfos(intent)
   }
 
   fun fetchList() {
@@ -26,15 +26,15 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     context.registerReceiver(broadcastReceiver, batFilter)
   }
 
-  private fun provideBatteryInfos(intent: Intent): ArrayList<BatteryInfo>? {
-    var infos = ArrayList<BatteryInfo>()
-    infos.add(BatteryInfo("Health", getHealth(intent)))
-    infos.add(BatteryInfo("Level", getLevel(intent)))
-    infos.add(BatteryInfo("Power source", getCharger(intent)))
-    infos.add(BatteryInfo("Status", getStatus(intent)))
-    infos.add(BatteryInfo("Technology", getTechnology(intent)))
-    infos.add(BatteryInfo("Temperature", getTemperature(intent)))
-    infos.add(BatteryInfo("Voltage", getVoltage()))
+  private fun provideNormalInfos(intent: Intent): ArrayList<NormalInfo>? {
+    var infos = ArrayList<NormalInfo>()
+    infos.add(NormalInfo("Health", getHealth(intent)))
+    infos.add(NormalInfo("Level", getLevel(intent)))
+    infos.add(NormalInfo("Power source", getCharger(intent)))
+    infos.add(NormalInfo("Status", getStatus(intent)))
+    infos.add(NormalInfo("Technology", getTechnology(intent)))
+    infos.add(NormalInfo("Temperature", getTemperature(intent)))
+    infos.add(NormalInfo("Voltage", getVoltage()))
     return infos
   }
 
