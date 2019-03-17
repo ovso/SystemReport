@@ -42,8 +42,8 @@ class MainPagerAdapter(
     1 -> DeviceFragment.newInstance()
     2 -> SystemFragment.newInstance()
     3 -> BatteryFragment.newInstance()
-    4 -> SensorsFragment.newInstance()
-    5 -> ThermalFragment.newInstance()
+    4 -> ThermalFragment.newInstance()
+    5 -> SensorsFragment.newInstance()
     else -> throw UnsupportedOperationException("Unsupported fragment")
   }
 
