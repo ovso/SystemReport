@@ -16,9 +16,9 @@ import io.github.ovso.systemreport.service.model.NormalInfo
 import io.github.ovso.systemreport.view.ui.main.views.adapter.NormalAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.SystemViewModel
 import kotlinx.android.synthetic.main.fragment_system.recyclerview_system
-import timber.log.Timber
 
 class SystemFragment : Fragment() {
+  val adapter = NormalAdapter()
 
   companion object {
     fun newInstance() = SystemFragment()
@@ -51,18 +51,15 @@ class SystemFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    recyclerview_system.adapter = NormalAdapter()
+    recyclerview_system.adapter = adapter
     viewModel.infoLiveData.observe(this, Observer {
-      var normalAdapter = recyclerview_system.adapter as NormalAdapter
-      normalAdapter.items.addAll(it)
+      adapter.items.addAll(it)
     })
     viewModel.uptimeLiveData.observe(this, Observer {
-      var normalAdapter = recyclerview_system.adapter as NormalAdapter
-      normalAdapter.items.set(
-          normalAdapter.items.lastIndex, NormalInfo("System uptime", viewModel.getUptime())
+      adapter.items.set(
+          adapter.items.lastIndex, NormalInfo("System uptime", viewModel.getUptime())
       )
-      normalAdapter.notifyDataSetChanged()
-      Timber.d(viewModel.getUptime())
+      adapter.notifyDataSetChanged()
     })
     viewModel.fetchList();
   }

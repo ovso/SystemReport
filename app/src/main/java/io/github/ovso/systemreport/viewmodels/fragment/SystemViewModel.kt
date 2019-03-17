@@ -16,13 +16,16 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.Locale
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.HOURS
+import java.util.concurrent.TimeUnit.MILLISECONDS
+import java.util.concurrent.TimeUnit.MINUTES
 import java.util.concurrent.TimeUnit.SECONDS
 
 class SystemViewModel(var context: Context) : ViewModel() {
+  private val compositeDisposable = CompositeDisposable()
   val infoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
-  val compositeDisposable = CompositeDisposable()
   val uptimeLiveData = MutableLiveData<String>()
+
   fun fetchList() {
     infoLiveData.value = getInfos()
     startIntervalForUptime()
@@ -39,7 +42,7 @@ class SystemViewModel(var context: Context) : ViewModel() {
   }
 
   private fun getInfos(): ArrayList<NormalInfo>? {
-    val easyDeviceMod = EasyDeviceMod(context);
+    val easyDeviceMod = EasyDeviceMod(context)
     val osName = getOsVersionName()
     val infos = ArrayList<NormalInfo>()
     infos.add(NormalInfo("OS version", easyDeviceMod.osVersion + " ( $osName )"))
@@ -53,7 +56,7 @@ class SystemViewModel(var context: Context) : ViewModel() {
 
     // last
     infos.add(NormalInfo("System uptime", getUptime()))
-    return infos;
+    return infos
   }
 
   private fun getRooted(isRooted: Boolean): String = when (isRooted) {
@@ -62,32 +65,28 @@ class SystemViewModel(var context: Context) : ViewModel() {
   }
 
   private fun getOsVersionName(): String {
-    try {
+    return try {
       val fields = Build.VERSION_CODES::class.java.fields
-      val osName = fields[Build.VERSION.SDK_INT].name
-      return osName;
+      fields[VERSION.SDK_INT].name
     } catch (e: Exception) {
       Timber.e(e)
-      return "Unknown"
+      "Unknown"
     }
   }
 
   fun getUptime(): String {
     val uptimeMillis = SystemClock.elapsedRealtime()
-    val wholeUptime = String.format(
+    return String.format(
         Locale.getDefault(),
         "%02d:%02d:%02d",
-        TimeUnit.MILLISECONDS.toHours(uptimeMillis),
-        TimeUnit.MILLISECONDS.toMinutes(uptimeMillis) - TimeUnit.HOURS.toMinutes(
-            TimeUnit.MILLISECONDS.toHours(uptimeMillis)
+        MILLISECONDS.toHours(uptimeMillis),
+        MILLISECONDS.toMinutes(uptimeMillis) - HOURS.toMinutes(
+            MILLISECONDS.toHours(uptimeMillis)
         ),
-        TimeUnit.MILLISECONDS.toSeconds(uptimeMillis) - TimeUnit.MINUTES.toSeconds(
-            TimeUnit.MILLISECONDS.toMinutes(uptimeMillis)
+        MILLISECONDS.toSeconds(uptimeMillis) - MINUTES.toSeconds(
+            MILLISECONDS.toMinutes(uptimeMillis)
         )
     )
-
-    return wholeUptime
-
   }
 
   override fun onCleared() {
