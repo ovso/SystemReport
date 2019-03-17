@@ -25,7 +25,7 @@ class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener 
     val millibarsOfTemperature = event!!.values[0]
     var size = event!!.values.size
     //Timber.d("millibarsOfTemperature = $millibarsOfTemperature size = $size")
-    Timber.d(cpuTemperatureTest())
+    //Timber.d(cpuTemperatureTest())
   }
 
   private lateinit var sensorManager: SensorManager
