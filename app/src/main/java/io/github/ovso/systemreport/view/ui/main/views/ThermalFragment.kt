@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentThermalBinding
+import io.github.ovso.systemreport.view.ui.main.views.adapter.NormalAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.ThermalViewModel
+import kotlinx.android.synthetic.main.fragment_thermal.recyclerview_thermal
 
 class ThermalFragment : Fragment() {
 
@@ -54,7 +57,12 @@ class ThermalFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-
+    recyclerview_thermal.adapter = NormalAdapter()
+    viewModel.infoLiveData.observe(this, Observer {
+      (recyclerview_thermal.adapter as NormalAdapter).items.clear()
+      (recyclerview_thermal.adapter as NormalAdapter).items.addAll(it)
+      (recyclerview_thermal.adapter as NormalAdapter).notifyDataSetChanged()
+    })
     viewModel.fetchData()
   }
 

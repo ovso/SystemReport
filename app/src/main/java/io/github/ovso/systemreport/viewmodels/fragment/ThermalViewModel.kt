@@ -1,42 +1,41 @@
 package io.github.ovso.systemreport.viewmodels.fragment
 
 import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.github.ovso.systemreport.service.model.NormalInfo
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit.SECONDS
 
-class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener {
-  override fun onAccuracyChanged(
-    sensor: Sensor?,
-    accuracy: Int
-  ) {
-
+class ThermalViewModel(var context: Context) : ViewModel() {
+  companion object {
+    val maxSize = 0..12;
   }
 
-  @Suppress("UNREACHABLE_CODE")
-  override fun onSensorChanged(event: SensorEvent?) {
-    //var sensor = event?.sensor
-    val millibarsOfTemperature = event!!.values[0]
-    var size = event!!.values.size
-    //Timber.d("millibarsOfTemperature = $millibarsOfTemperature size = $size")
-    //Timber.d(cpuTemperatureType())
-  }
+  val infoLiveData = MutableLiveData<List<NormalInfo>>()
 
   fun fetchData() {
 
     var subscribe = Observable.interval(1, SECONDS)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribeBy { l ->
-          var type = cpuTemperatureType()
-          var temp = cpuTemperature().toString()
+          var infos = ArrayList<NormalInfo>()
+          for (i in 0..16) {
+            if (i == 13) continue
+            val name = typeName(i);
+            val value = tempName(i).toString()
+            infos.add(NormalInfo(name, value))
 
-          Timber.d("$type : $temp")
+          }
+          infoLiveData.value = infos
+          Timber.d(infos.toString())
         }
   }
 
@@ -48,11 +47,11 @@ class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener 
     //sensorManager.unregisterListener(this)
   }
 
-  fun cpuTemperature(): Float {
+  fun tempName(path: Int): Float {
     val process: Process
     try {
       process = Runtime.getRuntime()
-          .exec("cat sys/class/thermal/thermal_zone0/temp")
+          .exec("cat sys/class/thermal/thermal_zone$path/temp")
       process.waitFor()
       val reader = BufferedReader(InputStreamReader(process.inputStream))
       val line = reader.readLine()
@@ -69,11 +68,11 @@ class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener 
 
   }
 
-  fun cpuTemperatureType(): String {
+  fun typeName(path: Int): String {
     val process: Process
     try {
       process = Runtime.getRuntime()
-          .exec("cat sys/class/thermal/thermal_zone0/type")
+          .exec("cat sys/class/thermal/thermal_zone$path/type")
       process.waitFor()
       val reader = BufferedReader(InputStreamReader(process.inputStream))
       return reader.readLine()
