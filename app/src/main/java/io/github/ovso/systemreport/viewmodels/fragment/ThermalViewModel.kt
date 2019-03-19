@@ -4,14 +4,12 @@ import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener {
-  private lateinit var temperatureSensor: Sensor
   override fun onAccuracyChanged(
     sensor: Sensor?,
     accuracy: Int
@@ -25,21 +23,22 @@ class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener 
     val millibarsOfTemperature = event!!.values[0]
     var size = event!!.values.size
     //Timber.d("millibarsOfTemperature = $millibarsOfTemperature size = $size")
-    //Timber.d(cpuTemperatureTest())
+    //Timber.d(cpuTemperatureType())
   }
 
-  private lateinit var sensorManager: SensorManager
   fun fetchData() {
-    sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
+
+    var temp = cpuTemperature().toString()
+    var type = cpuTemperatureType()
+    Timber.d("$type $temp")
   }
 
   fun register() {
-    sensorManager.registerListener(this, temperatureSensor, SensorManager.SENSOR_DELAY_NORMAL)
+    //sensorManager.registerListener(this, temperatureSensor, SensorManager.SENSOR_DELAY_NORMAL)
   }
 
   fun unregister() {
-    sensorManager.unregisterListener(this)
+    //sensorManager.unregisterListener(this)
   }
 
   fun cpuTemperature(): Float {
@@ -52,9 +51,9 @@ class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener 
       val line = reader.readLine()
       if (line != null) {
         val temp = java.lang.Float.parseFloat(line)
-        return temp / 1000.0f
+        return temp;
       } else {
-        return 51.0f
+        return 0.0f
       }
     } catch (e: Exception) {
       e.printStackTrace()
@@ -63,7 +62,7 @@ class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener 
 
   }
 
-  fun cpuTemperatureTest(): String {
+  fun cpuTemperatureType(): String {
     val process: Process
     try {
       process = Runtime.getRuntime()
@@ -72,7 +71,7 @@ class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener 
       val reader = BufferedReader(InputStreamReader(process.inputStream))
       return reader.readLine()
     } catch (e: Exception) {
-      Timber.e(e)
+      //Timber.e(e)
       return "Unknown"
     }
   }
