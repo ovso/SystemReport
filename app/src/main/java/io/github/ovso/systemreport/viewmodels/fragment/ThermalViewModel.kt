@@ -5,9 +5,12 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.concurrent.TimeUnit.SECONDS
 
 class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener {
   override fun onAccuracyChanged(
@@ -28,9 +31,13 @@ class ThermalViewModel(var context: Context) : ViewModel(), SensorEventListener 
 
   fun fetchData() {
 
-    var temp = cpuTemperature().toString()
-    var type = cpuTemperatureType()
-    Timber.d("$type $temp")
+    var subscribe = Observable.interval(1, SECONDS)
+        .subscribeBy { l ->
+          var type = cpuTemperatureType()
+          var temp = cpuTemperature().toString()
+
+          Timber.d("$type : $temp")
+        }
   }
 
   fun register() {
