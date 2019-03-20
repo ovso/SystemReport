@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_thermal.recyclerview_thermal
 
 class ThermalFragment : Fragment() {
   private val adapter = NormalAdapter()
+
   companion object {
     fun newInstance() = ThermalFragment()
   }
@@ -37,7 +38,7 @@ class ThermalFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?
   ): View? {
-    var dataBinding = DataBindingUtil.inflate<FragmentThermalBinding>(
+    val dataBinding = DataBindingUtil.inflate<FragmentThermalBinding>(
         inflater, R.layout.fragment_thermal, container, false
     )
     dataBinding.viewModel = provideViewModel()
@@ -63,16 +64,6 @@ class ThermalFragment : Fragment() {
       adapter.notifyDataSetChanged()
     })
     viewModel.fetchData()
-  }
-
-  override fun onResume() {
-    super.onResume()
-    viewModel.register()
-  }
-
-  override fun onPause() {
-    super.onPause()
-    viewModel.unregister()
   }
 
 }

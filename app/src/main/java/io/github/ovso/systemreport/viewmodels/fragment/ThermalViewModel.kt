@@ -12,78 +12,67 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.concurrent.TimeUnit.SECONDS
+import java.util.concurrent.TimeUnit.MILLISECONDS
 
 class ThermalViewModel(var context: Context) : ViewModel() {
   private val compositeDisposable = CompositeDisposable()
-  companion object {
-    val maxSize = 0..12;
-  }
 
   val infoLiveData = MutableLiveData<List<NormalInfo>>()
 
   fun fetchData() {
 
-    var d = Observable.interval(1, SECONDS)
+    val d = Observable.interval(1000, MILLISECONDS)
+        .map { t -> replaceList() }
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribeBy { l ->
-          var infos = ArrayList<NormalInfo>()
-          for (i in 0..16) {
-            if (i == 13) continue
-            val name = typeName(i);
-            val value = tempName(i).toString()
-            infos.add(NormalInfo(name, value))
-
-          }
-          infoLiveData.value = infos
-          Timber.d(infos.toString())
-        }
+        .subscribeBy(onError = {
+          Timber.e(it)
+          compositeDisposable.clear()
+          infoLiveData.value = ArrayList()
+          handleEmpty()
+        }, onNext = {
+          infoLiveData.value = it
+          handleEmpty()
+        })
     compositeDisposable.add(d)
-
   }
 
-  fun register() {
-    //sensorManager.registerListener(this, temperatureSensor, SensorManager.SENSOR_DELAY_NORMAL)
+  private fun handleEmpty() {
+    
   }
 
-  fun unregister() {
-    //sensorManager.unregisterListener(this)
-  }
-
-  fun tempName(path: Int): Float {
-    val process: Process
-    try {
-      process = Runtime.getRuntime()
-          .exec("cat sys/class/thermal/thermal_zone$path/temp")
-      process.waitFor()
-      val reader = BufferedReader(InputStreamReader(process.inputStream))
-      val line = reader.readLine()
-      if (line != null) {
-        val temp = java.lang.Float.parseFloat(line)
-        return temp;
-      } else {
-        return 0.0f
-      }
-    } catch (e: Exception) {
-      e.printStackTrace()
-      return 0.0f
+  fun replaceList(): ArrayList<NormalInfo> {
+    val infos = ArrayList<NormalInfo>()
+    for (i in 0..16) {
+      if (i == 13) continue
+      val name = typeName(i)
+      val value = tempValue(i).toString()
+      infos.add(NormalInfo(name, value))
     }
 
+    return infos
+  }
+
+  fun tempValue(path: Int): Float {
+    val process: Process
+    process = Runtime.getRuntime()
+        .exec("cat sys/class/thermal/thermal_zone$path/temp")
+    process.waitFor()
+    val reader = BufferedReader(InputStreamReader(process.inputStream))
+    val line = reader.readLine()
+    return when (line != null) {
+      true -> java.lang.Float.parseFloat(line)
+      false -> 0.0f
+    }
   }
 
   fun typeName(path: Int): String {
     val process: Process
-    try {
-      process = Runtime.getRuntime()
-          .exec("cat sys/class/thermal/thermal_zone$path/type")
-      process.waitFor()
-      val reader = BufferedReader(InputStreamReader(process.inputStream))
-      return reader.readLine()
-    } catch (e: Exception) {
-      //Timber.e(e)
-      return "Unknown"
-    }
+    process = Runtime.getRuntime()
+        .exec("cat sys/class/thermal/thermal_zone$path/type")
+    process.waitFor()
+    val reader = BufferedReader(InputStreamReader(process.inputStream))
+    return reader.readLine()
   }
 
   override fun onCleared() {
