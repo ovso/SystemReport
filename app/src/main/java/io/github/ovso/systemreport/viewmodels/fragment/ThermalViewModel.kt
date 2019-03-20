@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.github.ovso.systemreport.service.model.NormalInfo
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -14,6 +15,7 @@ import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit.SECONDS
 
 class ThermalViewModel(var context: Context) : ViewModel() {
+  private val compositeDisposable = CompositeDisposable()
   companion object {
     val maxSize = 0..12;
   }
@@ -22,7 +24,7 @@ class ThermalViewModel(var context: Context) : ViewModel() {
 
   fun fetchData() {
 
-    var subscribe = Observable.interval(1, SECONDS)
+    var d = Observable.interval(1, SECONDS)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeBy { l ->
@@ -37,6 +39,8 @@ class ThermalViewModel(var context: Context) : ViewModel() {
           infoLiveData.value = infos
           Timber.d(infos.toString())
         }
+    compositeDisposable.add(d)
+
   }
 
   fun register() {
@@ -82,4 +86,8 @@ class ThermalViewModel(var context: Context) : ViewModel() {
     }
   }
 
+  override fun onCleared() {
+    super.onCleared()
+    compositeDisposable.clear()
+  }
 }

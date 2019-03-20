@@ -17,7 +17,7 @@ import io.github.ovso.systemreport.viewmodels.fragment.ThermalViewModel
 import kotlinx.android.synthetic.main.fragment_thermal.recyclerview_thermal
 
 class ThermalFragment : Fragment() {
-
+  private val adapter = NormalAdapter()
   companion object {
     fun newInstance() = ThermalFragment()
   }
@@ -57,11 +57,10 @@ class ThermalFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    recyclerview_thermal.adapter = NormalAdapter()
+    recyclerview_thermal.adapter = adapter
     viewModel.infoLiveData.observe(this, Observer {
-      (recyclerview_thermal.adapter as NormalAdapter).items.clear()
-      (recyclerview_thermal.adapter as NormalAdapter).items.addAll(it)
-      (recyclerview_thermal.adapter as NormalAdapter).notifyDataSetChanged()
+      adapter.addItems(it)
+      adapter.notifyDataSetChanged()
     })
     viewModel.fetchData()
   }
@@ -75,4 +74,5 @@ class ThermalFragment : Fragment() {
     super.onPause()
     viewModel.unregister()
   }
+
 }
