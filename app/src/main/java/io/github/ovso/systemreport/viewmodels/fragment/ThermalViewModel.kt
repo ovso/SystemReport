@@ -17,12 +17,31 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 class ThermalViewModel(var context: Context) : ViewModel() {
   private val compositeDisposable = CompositeDisposable()
 
-  val infoLiveData = MutableLiveData<List<NormalInfo>>()
+  val infoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
 
   fun fetchData() {
 
+    val subscribe = Observable.fromArray(createInfos())
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy(onError = {
+          compositeDisposable.clear()
+          Timber.e(it)
+          val infos: ArrayList<NormalInfo> = ArrayList()
+          infos.add(NormalInfo("Uknown", ""))
+          infoLiveData.value = infos
+        }, onNext = {
+          infoLiveData.value = it
+          startInterval();
+        })
+
+    compositeDisposable.add(subscribe);
+
+  }
+
+  private fun startInterval() {
     val d = Observable.interval(1000, MILLISECONDS)
-        .map { t -> replaceList() }
+        .map { t -> createInfos() }
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onError = {
@@ -32,16 +51,16 @@ class ThermalViewModel(var context: Context) : ViewModel() {
           handleEmpty()
         }, onNext = {
           infoLiveData.value = it
-          handleEmpty()
         })
     compositeDisposable.add(d)
+
   }
 
   private fun handleEmpty() {
-    
+
   }
 
-  fun replaceList(): ArrayList<NormalInfo> {
+  fun createInfos(): ArrayList<NormalInfo> {
     val infos = ArrayList<NormalInfo>()
     for (i in 0..16) {
       if (i == 13) continue
@@ -67,6 +86,7 @@ class ThermalViewModel(var context: Context) : ViewModel() {
   }
 
   fun typeName(path: Int): String {
+    Timber.d("typeName path = $path")
     val process: Process
     process = Runtime.getRuntime()
         .exec("cat sys/class/thermal/thermal_zone$path/type")
