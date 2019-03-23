@@ -2,18 +2,18 @@ package io.github.ovso.systemreport.viewmodels.fragment
 
 import android.content.Context
 import android.graphics.Point
+import android.os.Environment
+import android.os.StatFs
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyDeviceMod
+import github.nisrulz.easydeviceinfo.base.EasyMemoryMod
 import io.github.ovso.systemreport.service.model.NormalInfo
 import timber.log.Timber
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
-import java.util.logging.SimpleFormatter
 
 class DeviceViewModel(var context: Context) : ViewModel() {
   val infoLiveData = MutableLiveData<List<NormalInfo>>()
@@ -24,6 +24,15 @@ class DeviceViewModel(var context: Context) : ViewModel() {
   }
 
   private fun provideInfos(): List<NormalInfo>? {
+    var easyMemoryMod = EasyMemoryMod(context)
+
+    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.availableExternalMemorySize).toString())
+    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.availableInternalMemorySize).toString())
+    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalExternalMemorySize).toString())
+    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalInternalMemorySize).toString())
+    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalRAM).toString())
+    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalRAM).toString())
+
     val infos = ArrayList<NormalInfo>()
     infos.add(NormalInfo("Model", easyDeviceMod.model))
     infos.add(NormalInfo("Manufacturer", easyDeviceMod.manufacturer))
@@ -31,17 +40,32 @@ class DeviceViewModel(var context: Context) : ViewModel() {
     infos.add(NormalInfo("Hardware", easyDeviceMod.hardware))
     infos.add(NormalInfo("Board", easyDeviceMod.board))
     infos.add(NormalInfo("Language", Locale.getDefault().getDisplayLanguage()))
-    infos.add(NormalInfo("Build time", getBuildTime()))
     infos.add(NormalInfo("Resolution", getResolution()))
     infos.add(NormalInfo("Screen size", getScreenSize()))
     infos.add(NormalInfo("Screen density", getDensity()))
+    infos.add(NormalInfo("Internal storage", getInternalStorage()))
+    infos.add(NormalInfo("Available storage", getAvailableStorage()))
+    infos.add(NormalInfo("Total RAM", getTotalRam()))
     return infos
   }
 
-  private fun getBuildTime(): String {
-    val buildTime = easyDeviceMod.buildTime
-    var simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    return simpleDateFormat.format(Date(buildTime))
+  private fun getTotalRam(): String {
+    val easyMemoryMod = EasyMemoryMod(context)
+    return easyMemoryMod.convertToGb(
+        easyMemoryMod.totalRAM
+    ).toDouble().roundTo2DecimalPlaces().toString() + " GB"
+  }
+
+  private fun getAvailableStorage(): String {
+    val easyMemoryMod = EasyMemoryMod(context)
+    val gb = easyMemoryMod.convertToGb(easyMemoryMod.availableInternalMemorySize)
+    return gb.toDouble().roundTo2DecimalPlaces().toString() + " GB"
+  }
+
+  private fun getInternalStorage(): String {
+    val easyMemoryMod = EasyMemoryMod(context)
+    val gb = easyMemoryMod.convertToGb(easyMemoryMod.totalInternalMemorySize)
+    return gb.toDouble().roundTo2DecimalPlaces().toString() + " GB"
   }
 
   private fun getResolution(): String {
