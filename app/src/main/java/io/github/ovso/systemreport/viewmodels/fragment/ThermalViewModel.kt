@@ -22,11 +22,22 @@ class ThermalViewModel(var context: Context) : ViewModel() {
   val infoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
 
   fun fetchData() {
-    startInterval()
+    compositeDisposable.add(
+        Observable.fromCallable { createInfos() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onError = { Timber.e(it) },
+                onNext = {
+                  infoLiveData.value = it
+                  startInterval()
+                })
+    )
+
   }
 
   private fun startInterval() {
-    val d = Observable.interval(5000, MILLISECONDS)
+    val d = Observable.interval(3000, MILLISECONDS)
         .map { t -> createInfos() }
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -39,7 +50,6 @@ class ThermalViewModel(var context: Context) : ViewModel() {
           infoLiveData.value = it
         })
     compositeDisposable.add(d)
-
   }
 
   private fun getTempSensorList(): List<String> {
