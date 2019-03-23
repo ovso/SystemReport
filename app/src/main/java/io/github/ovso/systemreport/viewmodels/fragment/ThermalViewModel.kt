@@ -12,6 +12,8 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.io.RandomAccessFile
+import java.lang.Exception
 import java.util.concurrent.TimeUnit.MILLISECONDS
 
 class ThermalViewModel(var context: Context) : ViewModel() {
@@ -24,7 +26,7 @@ class ThermalViewModel(var context: Context) : ViewModel() {
   }
 
   private fun startInterval() {
-    val d = Observable.interval(1000, MILLISECONDS)
+    val d = Observable.interval(5000, MILLISECONDS)
         .map { t -> createInfos() }
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -40,43 +42,47 @@ class ThermalViewModel(var context: Context) : ViewModel() {
 
   }
 
+  private fun getTempSensorList(): List<String> {
+    try {
+      val exec = Runtime.getRuntime()
+          .exec(arrayOf("ls", "sys/class/thermal/"))
+      exec.waitFor()
+      val reader = BufferedReader(InputStreamReader(exec.inputStream))
+      return reader.readLines()
+          .sorted()
+    } catch (e: Exception) {
+      Timber.e(e)
+      return ArrayList()
+    }
+  }
+
   private fun handleEmpty() {
 
   }
 
   fun createInfos(): ArrayList<NormalInfo> {
     val infos = ArrayList<NormalInfo>()
-    for (i in 0..16) {
-      if (i == 13) continue
-      val name = typeName(i)
-      val value = tempValue(i).toString()
-      infos.add(NormalInfo(name, value))
+    val sensors = getTempSensorList();
+    for (sensor in sensors) {
+      infos.add(NormalInfo(getSensorType(sensor), getTemp(sensor)))
     }
-
     return infos
   }
 
-  fun tempValue(path: Int): Float {
-    val process: Process
-    process = Runtime.getRuntime()
-        .exec("cat sys/class/thermal/thermal_zone$path/temp")
-    process.waitFor()
-    val reader = BufferedReader(InputStreamReader(process.inputStream))
-    val line = reader.readLine()
-    return when (line != null) {
-      true -> java.lang.Float.parseFloat(line)
-      false -> 0.0f
-    }
+  fun getTemp(type: String): String {
+    val fp = RandomAccessFile("/sys/class/thermal/$type/temp", "r")
+    val str = fp.readLine()
+    fp.close()
+
+    return str;
+
   }
 
-  fun typeName(path: Int): String {
-    Timber.d("typeName path = $path")
-    val process: Process
-    process = Runtime.getRuntime()
-        .exec("cat sys/class/thermal/thermal_zone$path/type")
-    process.waitFor()
-    val reader = BufferedReader(InputStreamReader(process.inputStream))
-    return reader.readLine()
+  fun getSensorType(type: String): String {
+    val raf = RandomAccessFile("sys/class/thermal/$type/type", "r")
+    val readLine = raf.readLine()
+    raf.close();
+    return readLine;
   }
 
   override fun onCleared() {
