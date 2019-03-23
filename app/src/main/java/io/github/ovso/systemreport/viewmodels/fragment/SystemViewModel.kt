@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.SystemClock
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyDeviceMod
@@ -24,10 +25,11 @@ import java.util.concurrent.TimeUnit.SECONDS
 class SystemViewModel(var context: Context) : ViewModel() {
   private val compositeDisposable = CompositeDisposable()
   val infoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
-  val uptimeLiveData = MutableLiveData<String>()
+  val uptimeObField = ObservableField<String>()
 
   fun fetchList() {
     infoLiveData.value = getInfos()
+    uptimeObField.set(getUptime())
     startIntervalForUptime()
   }
 
@@ -36,7 +38,7 @@ class SystemViewModel(var context: Context) : ViewModel() {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeBy {
-          uptimeLiveData.value = getUptime()
+          uptimeObField.set(getUptime())
         }
     compositeDisposable.add(subscribeBy)
   }
@@ -53,9 +55,6 @@ class SystemViewModel(var context: Context) : ViewModel() {
     infos.add(NormalInfo("Build id", easyDeviceMod.buildID))
     infos.add(NormalInfo("API level", easyDeviceMod.buildVersionSDK.toString()))
     infos.add(NormalInfo("Rooted", getRooted(easyDeviceMod.isDeviceRooted)))
-
-    // last
-    infos.add(NormalInfo("System uptime", getUptime()))
     return infos
   }
 

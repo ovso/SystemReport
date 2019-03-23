@@ -9,12 +9,40 @@
         type="io.github.ovso.systemreport.viewmodels.fragment.SystemViewModel"
         />
   </data>
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recyclerview_system"
+  <androidx.core.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:background="@android:color/black"
-      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-      tools:listitem="@layout/item_all"
-      />
+      >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/recyclerview_system"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+          tools:listitem="@layout/item_all"
+          />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@android:color/black"
+          android:orientation="horizontal"
+          >
+        <TextView
+            android:text="System uptime"
+            style="@style/NameTextViewForItem"
+            />
+        <TextView
+            android:id="@+id/textview_system_uptime"
+            android:text="@{viewModel.uptimeObField.get()}"
+            tools:text="33:00:11"
+            style="@style/ValueTextViewForItem"
+            />
+      </LinearLayout>
+    </LinearLayout>
+  </androidx.core.widget.NestedScrollView>
 </layout>

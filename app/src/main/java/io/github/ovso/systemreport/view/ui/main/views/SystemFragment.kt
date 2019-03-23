@@ -55,12 +55,6 @@ class SystemFragment : Fragment() {
     viewModel.infoLiveData.observe(this, Observer {
       adapter.items.addAll(it)
     })
-    viewModel.uptimeLiveData.observe(this, Observer {
-      adapter.items.set(
-          adapter.items.lastIndex, NormalInfo("System uptime", viewModel.getUptime())
-      )
-      adapter.notifyDataSetChanged()
-    })
     viewModel.fetchList();
   }
 
