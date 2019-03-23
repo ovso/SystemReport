@@ -20,23 +20,7 @@ class ThermalViewModel(var context: Context) : ViewModel() {
   val infoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
 
   fun fetchData() {
-
-    val subscribe = Observable.fromArray(createInfos())
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribeBy(onError = {
-          compositeDisposable.clear()
-          Timber.e(it)
-          val infos: ArrayList<NormalInfo> = ArrayList()
-          infos.add(NormalInfo("Uknown", ""))
-          infoLiveData.value = infos
-        }, onNext = {
-          infoLiveData.value = it
-          startInterval();
-        })
-
-    compositeDisposable.add(subscribe);
-
+    startInterval()
   }
 
   private fun startInterval() {
