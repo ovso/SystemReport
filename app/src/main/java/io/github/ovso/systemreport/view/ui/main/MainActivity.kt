@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
 import kotlinx.android.synthetic.main.content_main.viewpager_main
-
+//https://github.com/kamgurgul/cpu-info
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var viewModel: MainViewModel? = null
   override fun onCreate(savedInstanceState: Bundle?) {
