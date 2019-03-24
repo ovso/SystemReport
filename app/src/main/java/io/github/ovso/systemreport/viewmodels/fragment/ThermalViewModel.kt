@@ -13,7 +13,6 @@ import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.RandomAccessFile
-import java.lang.Exception
 import java.util.concurrent.TimeUnit.MILLISECONDS
 
 class ThermalViewModel(var context: Context) : ViewModel() {
