@@ -16,12 +16,16 @@ import io.github.ovso.systemreport.R.id
 import io.github.ovso.systemreport.R.layout
 import io.github.ovso.systemreport.R.string
 import io.github.ovso.systemreport.databinding.ActivityMainBinding
+import io.github.ovso.systemreport.view.ui.battery.BatteryFragment
+import io.github.ovso.systemreport.view.ui.screen.ScreenFragment
+import io.github.ovso.systemreport.view.ui.sensor.SensorsFragment
+import io.github.ovso.systemreport.view.ui.system.SystemFragment
+import io.github.ovso.systemreport.view.ui.thermal.ThermalFragment
 import io.github.ovso.systemreport.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
-import kotlinx.android.synthetic.main.app_bar_main.tablayout_main
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
-import kotlinx.android.synthetic.main.content_main.viewpager_main
+
 //https://github.com/kamgurgul/cpu-info
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var viewModel: MainViewModel? = null
@@ -43,6 +47,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   private fun setupNavigation() {
     nav_view.setNavigationItemSelectedListener(this)
+    var item = nav_view.menu.getItem(0)
+    item.setChecked(true)
+    onNavigationItemSelected(item)
   }
 
   private fun setupDrawerLayout() {
@@ -69,16 +76,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       binding.viewModel = viewModel
     }
 
-    setupViewPager()
     setupToolbar()
     setupDrawerLayout()
     setupNavigation()
-  }
-
-  private fun setupViewPager() {
-    viewpager_main.adapter =
-      MainPagerAdapter(supportFragmentManager, resources.getStringArray(R.array.page_titles))
-    tablayout_main.setupWithViewPager(viewpager_main)
   }
 
   override fun onBackPressed() {
@@ -108,27 +108,54 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     // Handle navigation view item clicks here.
     when (item.itemId) {
-      id.nav_camera -> {
-        // Handle the camera action
+      id.nav_screen -> {
+        showScreenFragment()
       }
-      id.nav_gallery -> {
-
+      id.nav_battery -> {
+        showBatteryFragment()
       }
-      id.nav_slideshow -> {
-
+      id.nav_system -> {
+        showSystemFragment()
       }
-      id.nav_manage -> {
-
+      id.nav_thermal -> {
+        showThermalFragment()
       }
-      id.nav_share -> {
-
-      }
-      id.nav_send -> {
-
+      id.nav_sensors -> {
+        showSensorsFragment()
       }
     }
 
     drawer_layout.closeDrawer(GravityCompat.START)
     return true
+  }
+
+  private fun showScreenFragment() {
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.framelayout_main_fcontainer, ScreenFragment.newInstance())
+        .commitNow();
+  }
+
+  private fun showSensorsFragment() {
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.framelayout_main_fcontainer, SensorsFragment.newInstance())
+        .commitNow();
+  }
+
+  private fun showThermalFragment() {
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.framelayout_main_fcontainer, ThermalFragment.newInstance())
+        .commitNow();
+  }
+
+  private fun showSystemFragment() {
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.framelayout_main_fcontainer, SystemFragment.newInstance())
+        .commitNow();
+  }
+
+  private fun showBatteryFragment() {
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.framelayout_main_fcontainer, BatteryFragment.newInstance())
+        .commitNow();
   }
 }

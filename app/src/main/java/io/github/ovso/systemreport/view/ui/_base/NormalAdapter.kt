@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.main.views.adapter
+package io.github.ovso.systemreport.view.ui._base
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.service.model.NormalInfo
-import io.github.ovso.systemreport.view.ui.main.views.adapter.NormalAdapter.NormalViewHolder
+import io.github.ovso.systemreport.view.ui._base.NormalAdapter.NormalViewHolder
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_all.textview_allviewholder_name
 import kotlinx.android.synthetic.main.item_all.textview_allviewholder_value

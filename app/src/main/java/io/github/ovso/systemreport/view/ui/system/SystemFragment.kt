@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.main.views
+package io.github.ovso.systemreport.view.ui.system
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentSystemBinding
-import io.github.ovso.systemreport.service.model.NormalInfo
-import io.github.ovso.systemreport.view.ui.main.views.adapter.NormalAdapter
+import io.github.ovso.systemreport.view.ui._base.NormalAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.SystemViewModel
 import kotlinx.android.synthetic.main.fragment_system.recyclerview_system
 

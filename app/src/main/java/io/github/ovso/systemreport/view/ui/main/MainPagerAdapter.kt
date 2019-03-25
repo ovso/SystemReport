@@ -1,16 +1,15 @@
 package io.github.ovso.systemreport.view.ui.main
 
-import android.bluetooth.BluetoothClass.Device
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import io.github.ovso.systemreport.view.ui.main.views.BatteryFragment
-import io.github.ovso.systemreport.view.ui.main.views.DeviceFragment
-import io.github.ovso.systemreport.view.ui.main.views.SensorsFragment
-import io.github.ovso.systemreport.view.ui.main.views.SocFragment
-import io.github.ovso.systemreport.view.ui.main.views.SystemFragment
-import io.github.ovso.systemreport.view.ui.main.views.ThermalFragment
+import io.github.ovso.systemreport.view.ui.battery.BatteryFragment
+import io.github.ovso.systemreport.view.ui.screen.ScreenFragment
+import io.github.ovso.systemreport.view.ui.sensor.SensorsFragment
+import io.github.ovso.systemreport.view.ui.soc.SocFragment
+import io.github.ovso.systemreport.view.ui.system.SystemFragment
+import io.github.ovso.systemreport.view.ui.thermal.ThermalFragment
 import java.lang.UnsupportedOperationException
 
 class MainPagerAdapter(
@@ -39,7 +38,7 @@ class MainPagerAdapter(
 
   fun provideFragments(position: Int) = when (position) {
     0 -> SocFragment.newInstance()
-    1 -> DeviceFragment.newInstance()
+    1 -> ScreenFragment.newInstance()
     2 -> SystemFragment.newInstance()
     3 -> BatteryFragment.newInstance()
     4 -> ThermalFragment.newInstance()

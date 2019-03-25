@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.ui.main.views.DeviceFragment"
+    tools:context=".view.ui.screen.ScreenFragment"
     >
   <data>
     <variable

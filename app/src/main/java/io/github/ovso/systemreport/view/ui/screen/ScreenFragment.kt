@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.main.views
+package io.github.ovso.systemreport.view.ui.screen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,18 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentDeviceBinding
-import io.github.ovso.systemreport.view.ui.main.views.adapter.NormalAdapter
+import io.github.ovso.systemreport.view.ui._base.NormalAdapter
 import io.github.ovso.systemreport.viewmodels.fragment.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_device.recyclerview_device
 
-class DeviceFragment : Fragment() {
+class ScreenFragment : Fragment() {
 
   companion object {
-    fun newInstance() = DeviceFragment()
+    fun newInstance() = ScreenFragment()
   }
 
   private lateinit var viewModel: DeviceViewModel
