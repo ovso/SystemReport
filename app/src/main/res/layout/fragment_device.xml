@@ -8,7 +8,7 @@
   <data>
     <variable
         name="viewModel"
-        type="io.github.ovso.systemreport.viewmodels.fragment.DeviceViewModel"
+        type="io.github.ovso.systemreport.view.ui.screen.ScreenViewModel"
         />
   </data>
   <androidx.recyclerview.widget.RecyclerView

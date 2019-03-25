@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentSystemBinding
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter
-import io.github.ovso.systemreport.viewmodels.fragment.SystemViewModel
 import kotlinx.android.synthetic.main.fragment_system.recyclerview_system
 
 class SystemFragment : Fragment() {

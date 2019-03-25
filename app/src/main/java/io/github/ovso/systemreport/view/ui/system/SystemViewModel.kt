@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.viewmodels.fragment
+package io.github.ovso.systemreport.view.ui.system
 
 import android.content.Context
 import android.os.Build

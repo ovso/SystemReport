@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentSocBinding
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter
-import io.github.ovso.systemreport.viewmodels.fragment.SocViewModel
 import kotlinx.android.synthetic.main.fragment_soc.recyclerview_soc
 
 class SocFragment : Fragment() {

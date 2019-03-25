@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentDeviceBinding
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter
-import io.github.ovso.systemreport.viewmodels.fragment.DeviceViewModel
 import kotlinx.android.synthetic.main.fragment_device.recyclerview_device
 
 class ScreenFragment : Fragment() {
@@ -22,7 +21,7 @@ class ScreenFragment : Fragment() {
     fun newInstance() = ScreenFragment()
   }
 
-  private lateinit var viewModel: DeviceViewModel
+  private lateinit var viewModel: ScreenViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -43,12 +42,12 @@ class ScreenFragment : Fragment() {
   }
 
   @Suppress("UNCHECKED_CAST")
-  private fun provideViewModel(): DeviceViewModel {
+  private fun provideViewModel(): ScreenViewModel {
     viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
       override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-        DeviceViewModel(context!!) as T
+        ScreenViewModel(context!!) as T
     })
-        .get(DeviceViewModel::class.java)
+        .get(ScreenViewModel::class.java)
     return viewModel
   }
 

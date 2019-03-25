@@ -6,7 +6,7 @@
   <data>
     <variable
         name="viewModel"
-        type="io.github.ovso.systemreport.viewmodels.fragment.SystemViewModel"
+        type="io.github.ovso.systemreport.view.ui.system.SystemViewModel"
         />
   </data>
   <androidx.core.widget.NestedScrollView

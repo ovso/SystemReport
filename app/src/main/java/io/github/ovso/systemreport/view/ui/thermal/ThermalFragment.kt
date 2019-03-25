@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentThermalBinding
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter
-import io.github.ovso.systemreport.viewmodels.fragment.ThermalViewModel
 import kotlinx.android.synthetic.main.fragment_thermal.recyclerview_thermal
 
 class ThermalFragment : Fragment() {

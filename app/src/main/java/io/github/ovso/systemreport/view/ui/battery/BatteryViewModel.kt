@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.viewmodels.fragment
+package io.github.ovso.systemreport.view.ui.battery
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -77,11 +77,6 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     percentage = (level / scale.toFloat() * 100).toInt()
 
     return "${percentage}%"
-  }
-
-  private fun getBatteryStatusIntent(): Intent? {
-    val batFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-    return context.registerReceiver(null, batFilter)
   }
 
   var broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {

@@ -6,7 +6,7 @@
   <data>
     <variable
         name="viewModel"
-        type="io.github.ovso.systemreport.viewmodels.MainViewModel"
+        type="io.github.ovso.systemreport.view.ui.main.MainViewModel"
         />
   </data>
 

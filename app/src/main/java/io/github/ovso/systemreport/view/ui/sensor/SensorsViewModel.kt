@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.viewmodels.fragment
+package io.github.ovso.systemreport.view.ui.sensor
 
 import androidx.lifecycle.ViewModel;
 

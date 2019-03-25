@@ -21,7 +21,6 @@ import io.github.ovso.systemreport.view.ui.screen.ScreenFragment
 import io.github.ovso.systemreport.view.ui.sensor.SensorsFragment
 import io.github.ovso.systemreport.view.ui.system.SystemFragment
 import io.github.ovso.systemreport.view.ui.thermal.ThermalFragment
-import io.github.ovso.systemreport.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.toolbar

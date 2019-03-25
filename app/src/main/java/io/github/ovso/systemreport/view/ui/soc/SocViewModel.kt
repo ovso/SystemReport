@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.viewmodels.fragment
+package io.github.ovso.systemreport.view.ui.soc
 
 import android.content.Context
 import androidx.databinding.ObservableField

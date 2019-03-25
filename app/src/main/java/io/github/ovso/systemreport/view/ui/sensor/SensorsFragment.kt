@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import io.github.ovso.systemreport.R
-import io.github.ovso.systemreport.viewmodels.fragment.SensorsViewModel
 
 class SensorsFragment : Fragment() {
 

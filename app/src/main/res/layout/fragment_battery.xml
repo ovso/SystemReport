@@ -5,7 +5,7 @@
   <data>
     <variable
         name="viewModel"
-        type="io.github.ovso.systemreport.viewmodels.fragment.BatteryViewModel"
+        type="io.github.ovso.systemreport.view.ui.battery.BatteryViewModel"
         />
   </data>
   <androidx.recyclerview.widget.RecyclerView

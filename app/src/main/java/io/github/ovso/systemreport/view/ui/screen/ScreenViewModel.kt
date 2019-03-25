@@ -1,9 +1,7 @@
-package io.github.ovso.systemreport.viewmodels.fragment
+package io.github.ovso.systemreport.view.ui.screen
 
 import android.content.Context
 import android.graphics.Point
-import android.os.Environment
-import android.os.StatFs
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +13,7 @@ import timber.log.Timber
 import java.math.BigDecimal
 import java.util.Locale
 
-class DeviceViewModel(var context: Context) : ViewModel() {
+class ScreenViewModel(var context: Context) : ViewModel() {
   val infoLiveData = MutableLiveData<List<NormalInfo>>()
   private val easyDeviceMod = EasyDeviceMod(context)
 

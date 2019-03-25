@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentBatteryBinding
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter
-import io.github.ovso.systemreport.viewmodels.fragment.BatteryViewModel
 import kotlinx.android.synthetic.main.fragment_battery.recyclerview_battery
 
 class BatteryFragment : Fragment() {

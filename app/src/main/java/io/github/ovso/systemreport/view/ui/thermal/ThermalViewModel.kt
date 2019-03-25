@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.viewmodels.fragment
+package io.github.ovso.systemreport.view.ui.thermal
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
