@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.main.views
+package io.github.ovso.systemreport.view.ui.sensor
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -8,28 +8,28 @@ import android.view.View
 import android.view.ViewGroup
 
 import io.github.ovso.systemreport.R
-import io.github.ovso.systemreport.viewmodels.fragment.DeviceViewModel
+import io.github.ovso.systemreport.viewmodels.fragment.SensorsViewModel
 
-class DeviceFragment : Fragment() {
+class SensorsFragment : Fragment() {
 
   companion object {
-    fun newInstance() = DeviceFragment()
+    fun newInstance() = SensorsFragment()
   }
 
-  private lateinit var viewModel: DeviceViewModel
+  private lateinit var viewModel: SensorsViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_device, container, false)
+    return inflater.inflate(R.layout.fragment_sensors, container, false)
   }
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     viewModel = ViewModelProviders.of(this)
-        .get(DeviceViewModel::class.java)
+        .get(SensorsViewModel::class.java)
     // TODO: Use the ViewModel
   }
 

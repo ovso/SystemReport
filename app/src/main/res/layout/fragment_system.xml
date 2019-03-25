@@ -1,16 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.ui.main.views.SystemFragment"
     >
-
-  <TextView
+  <data>
+    <variable
+        name="viewModel"
+        type="io.github.ovso.systemreport.viewmodels.fragment.SystemViewModel"
+        />
+  </data>
+  <androidx.core.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:text="System"
-      />
-
-</FrameLayout>
+      android:background="@android:color/black"
+      >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/recyclerview_system"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+          tools:listitem="@layout/item_all"
+          />
+      <LinearLayout
+          style="@style/ContainerForItem"
+          >
+        <TextView
+            android:text="System uptime"
+            style="@style/NameTextViewForItem"
+            />
+        <TextView
+            android:id="@+id/textview_system_uptime"
+            android:text="@{viewModel.uptimeObField.get()}"
+            tools:text="33:00:11"
+            style="@style/ValueTextViewForItem"
+            />
+      </LinearLayout>
+    </LinearLayout>
+  </androidx.core.widget.NestedScrollView>
+</layout>

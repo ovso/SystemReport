@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string-array name="info_type">
+  <string-array name="page_titles">
     <item>SoC</item>
     <item>Device</item>
     <item>System</item>

@@ -1,6 +1,6 @@
 package io.github.ovso.systemreport.service.model
 
-data class BatteryInfo(
+data class NormalInfo(
   var name: String,
   var value: String
 )

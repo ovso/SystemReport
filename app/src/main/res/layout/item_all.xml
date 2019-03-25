@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ContainerForItem"
+    >
+  <TextView
+      android:id="@+id/textview_allviewholder_name"
+      tools:text="Health"
+      style="@style/NameTextViewForItem"
+      />
+  <TextView
+      android:id="@+id/textview_allviewholder_value"
+      tools:text="GOOD"
+      style="@style/ValueTextViewForItem"
+      />
+</LinearLayout>

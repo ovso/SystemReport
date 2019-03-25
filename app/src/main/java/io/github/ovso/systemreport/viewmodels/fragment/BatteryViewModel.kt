@@ -5,22 +5,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
-import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
-import io.github.ovso.systemreport.service.model.BatteryInfo
+import io.github.ovso.systemreport.service.model.NormalInfo
 
 class BatteryViewModel(var context: Context) : ViewModel() {
   var batteryMod = EasyBatteryMod(context)
-  var batteryInfoLiveData = MutableLiveData<ArrayList<BatteryInfo>>()
-  var batteryInfoObField = ObservableField<ArrayList<BatteryInfo>>()
-  fun fetchList(intent: Intent) {
-    batteryInfoLiveData.value = provideBatteryInfos(intent)
-    //batteryInfoObField.set(provideBatteryInfos())
+  var batteryInfoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
+  fun changeBattery(intent: Intent) {
+    batteryInfoLiveData.value = provideNormalInfos(intent)
   }
 
-  init {
+  fun fetchList() {
     registerBattery()
   }
 
@@ -29,15 +26,15 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     context.registerReceiver(broadcastReceiver, batFilter)
   }
 
-  private fun provideBatteryInfos(intent: Intent): ArrayList<BatteryInfo>? {
-    var infos = ArrayList<BatteryInfo>()
-    infos.add(BatteryInfo("Health", getHealth(intent)))
-    infos.add(BatteryInfo("Percentage", getPercentage()))
-    infos.add(BatteryInfo("Power source", getCharger()))
-    infos.add(BatteryInfo("Status", getStatus()))
-    infos.add(BatteryInfo("Technology", getTechnology()))
-    infos.add(BatteryInfo("Temperature", getTemperature()))
-    infos.add(BatteryInfo("Voltage", getVoltage()))
+  private fun provideNormalInfos(intent: Intent): ArrayList<NormalInfo>? {
+    var infos = ArrayList<NormalInfo>()
+    infos.add(NormalInfo("Health", getHealth(intent)))
+    infos.add(NormalInfo("Level", getLevel(intent)))
+    infos.add(NormalInfo("Power source", getCharger(intent)))
+    infos.add(NormalInfo("Status", getStatus(intent)))
+    infos.add(NormalInfo("Technology", getTechnology(intent)))
+    infos.add(NormalInfo("Temperature", getTemperature(intent)))
+    infos.add(NormalInfo("Voltage", getVoltage()))
     return infos
   }
 
@@ -45,62 +42,39 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     return "${batteryMod.batteryVoltage} mV"
   }
 
-  private fun getTemperature(): String {
-    var temp = 0.0f
-    val batteryStatus = getBatteryStatusIntent()
-    batteryStatus?.let {
-      temp = (it.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10.0).toFloat()
-    }
-
+  private fun getTemperature(intent: Intent): String {
+    var temp = (intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10.0).toFloat()
     return "$temp \u2103"
-
   }
 
-  fun getTechnology(): String {
-    var batteryStatus = getBatteryStatusIntent()
-    batteryStatus?.let {
-      return it.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY)
+  fun getTechnology(intent: Intent) = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY)
+
+  private fun getStatus(intent: Intent): String {
+    var status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
+    when (status) {
+      BatteryManager.BATTERY_STATUS_CHARGING -> return "Charging"
+      BatteryManager.BATTERY_STATUS_DISCHARGING -> return "Discharging"
+      BatteryManager.BATTERY_STATUS_FULL -> return "Full"
+      BatteryManager.BATTERY_STATUS_NOT_CHARGING -> return "Not charging"
+      else -> return "Unknown"
     }
-    return "Unknown"
   }
 
-  private fun getStatus(): String {
-    val batteryStatus = getBatteryStatusIntent()
-    batteryStatus?.let {
-      var status = it.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
-      when (status) {
-        BatteryManager.BATTERY_STATUS_CHARGING -> return "Charging"
-        BatteryManager.BATTERY_STATUS_DISCHARGING -> return "Discharging"
-        BatteryManager.BATTERY_STATUS_FULL -> return "Full"
-        BatteryManager.BATTERY_STATUS_NOT_CHARGING -> return "Not charging"
-        else -> return "Unknown"
-      }
+  fun getCharger(intent: Intent): String {
+    var chargePlug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0)
+    when (chargePlug) {
+      BatteryManager.BATTERY_PLUGGED_AC -> return "AC powered"
+      BatteryManager.BATTERY_PLUGGED_USB -> return "USB powered"
+      BatteryManager.BATTERY_PLUGGED_WIRELESS -> return "WIRELESS powered"
+      else -> return "Battery powered"
     }
-    return "Unknown"
   }
 
-  fun getCharger(): String {
-    val batteryStatus = getBatteryStatusIntent()
-    batteryStatus?.let {
-      var chargePlug = it.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0)
-      when (chargePlug) {
-        BatteryManager.BATTERY_PLUGGED_AC -> return "AC"
-        BatteryManager.BATTERY_PLUGGED_USB -> return "USB Port"
-        BatteryManager.BATTERY_PLUGGED_WIRELESS -> return "WIRELESS"
-        else -> return "Battery"
-      }
-    }
-    return "Battery"
-  }
-
-  fun getPercentage(): String {
-    var percentage = 0
-    val batteryStatus = getBatteryStatusIntent()
-    batteryStatus?.let {
-      val level = it.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-      val scale = it.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
-      percentage = (level / scale.toFloat() * 100).toInt()
-    }
+  fun getLevel(intent: Intent): String {
+    var percentage: Int
+    val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+    val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+    percentage = (level / scale.toFloat() * 100).toInt()
 
     return "${percentage}%"
   }
@@ -115,7 +89,7 @@ class BatteryViewModel(var context: Context) : ViewModel() {
       context: Context?,
       intent: Intent?
     ) {
-      fetchList(intent!!)
+      changeBattery(intent!!)
     }
   }
 
