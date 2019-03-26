@@ -26,10 +26,14 @@ class ThermalViewModel(var context: Context) : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
-                onError = { Timber.e(it) },
+                onError = {
+                  Timber.e(it)
+                },
                 onNext = {
-                  infoLiveData.value = it
-                  startInterval()
+                  if (!it.isEmpty()) {
+                    infoLiveData.value = it
+                    startInterval()
+                  }
                 })
     )
 
