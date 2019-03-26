@@ -9,7 +9,9 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyDeviceMod
+import github.nisrulz.easydeviceinfo.base.EasyMemoryMod
 import io.github.ovso.systemreport.service.model.NormalInfo
+import io.github.ovso.systemreport.view.ui._base.roundTo2DecimalPlaces
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -48,6 +50,15 @@ class SystemViewModel(var context: Context) : ViewModel() {
     val osName = getOsVersionName()
     val infos = ArrayList<NormalInfo>()
     infos.add(NormalInfo("OS version", easyDeviceMod.osVersion + " ( $osName )"))
+    infos.add(NormalInfo("Model", easyDeviceMod.model))
+    infos.add(NormalInfo("Manufacturer", easyDeviceMod.manufacturer))
+    infos.add(NormalInfo("Brand", easyDeviceMod.buildBrand))
+    infos.add(NormalInfo("Hardware", easyDeviceMod.hardware))
+    infos.add(NormalInfo("Board", easyDeviceMod.board))
+    infos.add(NormalInfo("Language", Locale.getDefault().getDisplayLanguage()))
+    infos.add(NormalInfo("Internal storage", getInternalStorage()))
+    infos.add(NormalInfo("Available storage", getAvailableStorage()))
+    infos.add(NormalInfo("Total RAM", getTotalRam()))
     if (VERSION.SDK_INT >= VERSION_CODES.M) {
       infos.add(NormalInfo("Security patch", android.os.Build.VERSION.SECURITY_PATCH))
     }
@@ -56,6 +67,25 @@ class SystemViewModel(var context: Context) : ViewModel() {
     infos.add(NormalInfo("API level", easyDeviceMod.buildVersionSDK.toString()))
     infos.add(NormalInfo("Rooted", getRooted(easyDeviceMod.isDeviceRooted)))
     return infos
+  }
+
+  private fun getTotalRam(): String {
+    val easyMemoryMod = EasyMemoryMod(context)
+    return easyMemoryMod.convertToGb(
+        easyMemoryMod.totalRAM
+    ).toDouble().roundTo2DecimalPlaces().toString() + " GB"
+  }
+
+  private fun getAvailableStorage(): String {
+    val easyMemoryMod = EasyMemoryMod(context)
+    val gb = easyMemoryMod.convertToGb(easyMemoryMod.availableInternalMemorySize)
+    return gb.toDouble().roundTo2DecimalPlaces().toString() + " GB"
+  }
+
+  private fun getInternalStorage(): String {
+    val easyMemoryMod = EasyMemoryMod(context)
+    val gb = easyMemoryMod.convertToGb(easyMemoryMod.totalInternalMemorySize)
+    return gb.toDouble().roundTo2DecimalPlaces().toString() + " GB"
   }
 
   private fun getRooted(isRooted: Boolean): String = when (isRooted) {

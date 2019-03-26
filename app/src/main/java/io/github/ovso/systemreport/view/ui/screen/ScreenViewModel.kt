@@ -1,84 +1,51 @@
 package io.github.ovso.systemreport.view.ui.screen
 
+import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Point
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import github.nisrulz.easydeviceinfo.base.EasyDeviceMod
-import github.nisrulz.easydeviceinfo.base.EasyMemoryMod
 import io.github.ovso.systemreport.service.model.NormalInfo
+import io.github.ovso.systemreport.view.ui._base.round2
+import io.github.ovso.systemreport.view.ui._base.roundTo2DecimalPlaces
 import timber.log.Timber
-import java.math.BigDecimal
-import java.util.Locale
 
 class ScreenViewModel(var context: Context) : ViewModel() {
   val infoLiveData = MutableLiveData<List<NormalInfo>>()
-  private val easyDeviceMod = EasyDeviceMod(context)
 
   fun fetchList() {
     infoLiveData.value = provideInfos()
   }
 
   private fun provideInfos(): List<NormalInfo>? {
-    var easyMemoryMod = EasyMemoryMod(context)
-
-    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.availableExternalMemorySize).toString())
-    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.availableInternalMemorySize).toString())
-    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalExternalMemorySize).toString())
-    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalInternalMemorySize).toString())
-    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalRAM).toString())
-    Timber.d(easyMemoryMod.convertToGb(easyMemoryMod.totalRAM).toString())
-
     val infos = ArrayList<NormalInfo>()
-    infos.add(NormalInfo("Model", easyDeviceMod.model))
-    infos.add(NormalInfo("Manufacturer", easyDeviceMod.manufacturer))
-    infos.add(NormalInfo("Brand", easyDeviceMod.buildBrand))
-    infos.add(NormalInfo("Hardware", easyDeviceMod.hardware))
-    infos.add(NormalInfo("Board", easyDeviceMod.board))
-    infos.add(NormalInfo("Language", Locale.getDefault().getDisplayLanguage()))
-    infos.add(NormalInfo("Resolution", getResolution()))
-    infos.add(NormalInfo("Screen size", getScreenSize()))
-    infos.add(NormalInfo("Screen density", getDensity()))
-    infos.add(NormalInfo("Internal storage", getInternalStorage()))
-    infos.add(NormalInfo("Available storage", getAvailableStorage()))
-    infos.add(NormalInfo("Total RAM", getTotalRam()))
+    infos.add(NormalInfo("Inches", getInches()))
+    infos.add(NormalInfo("Density class", getDpi()))
+    infos.add(NormalInfo("Screen layout", getScreenLayout()))
+    infos.addAll(getInfoFromDisplayMetrics())
     return infos
   }
 
-  private fun getTotalRam(): String {
-    val easyMemoryMod = EasyMemoryMod(context)
-    return easyMemoryMod.convertToGb(
-        easyMemoryMod.totalRAM
-    ).toDouble().roundTo2DecimalPlaces().toString() + " GB"
+  private fun getScreenLayout(): String {
+    val screenSize =
+      context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
+
+    val layoutSize: String
+
+    layoutSize = when (screenSize) {
+      Configuration.SCREENLAYOUT_SIZE_LARGE -> "Large"
+      Configuration.SCREENLAYOUT_SIZE_NORMAL -> "Normal"
+      Configuration.SCREENLAYOUT_SIZE_SMALL -> "Small"
+      else -> "Unknown"
+    }
+
+    return layoutSize
   }
 
-  private fun getAvailableStorage(): String {
-    val easyMemoryMod = EasyMemoryMod(context)
-    val gb = easyMemoryMod.convertToGb(easyMemoryMod.availableInternalMemorySize)
-    return gb.toDouble().roundTo2DecimalPlaces().toString() + " GB"
-  }
-
-  private fun getInternalStorage(): String {
-    val easyMemoryMod = EasyMemoryMod(context)
-    val gb = easyMemoryMod.convertToGb(easyMemoryMod.totalInternalMemorySize)
-    return gb.toDouble().roundTo2DecimalPlaces().toString() + " GB"
-  }
-
-  private fun getResolution(): String {
-    val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    val display = windowManager.getDefaultDisplay()
-    val metrics = DisplayMetrics()
-    display.getMetrics(metrics)
-    val outSize = Point()
-    display.getRealSize(outSize);
-    val widthPixels = outSize.x
-    val heightPixels = outSize.y
-    return "$widthPixels x $heightPixels"
-  }
-
-  private fun getScreenSize(): String {
+  private fun getInches(): String {
     val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val display = windowManager.getDefaultDisplay()
     val metrics = DisplayMetrics()
@@ -95,7 +62,7 @@ class ScreenViewModel(var context: Context) : ViewModel() {
     return "$roundTo2DecimalPlaces inches"
   }
 
-  private fun getDensity(): String {
+  private fun getDensityDpi(): String {
     val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val display = windowManager.getDefaultDisplay()
     val metrics = DisplayMetrics()
@@ -103,7 +70,173 @@ class ScreenViewModel(var context: Context) : ViewModel() {
     return "${metrics.xdpi.toInt()} dpi"
   }
 
-  fun Double.roundTo2DecimalPlaces() =
-    BigDecimal(this).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
+  private fun getDpi(): String {
+    val densityDpi = context.resources.displayMetrics.densityDpi
+
+    val densityClass: String
+    when (densityDpi) {
+      DisplayMetrics.DENSITY_LOW -> {
+        densityClass = "ldpi"
+      }
+
+      DisplayMetrics.DENSITY_MEDIUM -> {
+        densityClass = "mdpi"
+      }
+
+      DisplayMetrics.DENSITY_TV, DisplayMetrics.DENSITY_HIGH -> {
+        densityClass = "hdpi"
+      }
+
+      DisplayMetrics.DENSITY_XHIGH, DisplayMetrics.DENSITY_280 -> {
+        densityClass = "xhdpi"
+      }
+
+      DisplayMetrics.DENSITY_XXHIGH, DisplayMetrics.DENSITY_360, DisplayMetrics.DENSITY_400,
+      DisplayMetrics.DENSITY_420 -> {
+        densityClass = "xxhdpi"
+      }
+
+      DisplayMetrics.DENSITY_XXXHIGH, DisplayMetrics.DENSITY_560 -> {
+        densityClass = "xxxhdpi"
+      }
+
+      else -> {
+        densityClass = "Unknown"
+      }
+    }
+
+    return densityClass
+  }
+
+  private fun getStatusBarHeight(): String {
+
+    val res = context.resources
+    val height = res.getIdentifier(
+        "status_bar_height", "dimen", "android"
+    )
+    if (height > 0) {
+      val pixel = res.getDimensionPixelSize(height);
+      Timber.d("height = $height")
+      return "$pixel px"
+    } else {
+      return "Unknown"
+    }
+
+  }
+
+  private fun getInfoFromDisplayMetrics(): ArrayList<NormalInfo> {
+    val infos = ArrayList<NormalInfo>()
+    val windowManager = (context as Activity).windowManager
+    val display = windowManager.defaultDisplay
+
+    val metrics = DisplayMetrics()
+    try {
+      display.getRealMetrics(metrics)
+      infos.add(NormalInfo("Real Width", "${metrics.widthPixels}px"))
+      infos.add(NormalInfo("Real Height", "${metrics.heightPixels}px"))
+
+      val density = metrics.density
+      val dpHeight = metrics.heightPixels / density
+      val dpWidth = metrics.widthPixels / density
+
+      infos.add(NormalInfo("Dp width", "${dpWidth.toInt()} dp"))
+      infos.add(NormalInfo("Dp height", "${dpHeight.toInt()} dp"))
+      infos.add(NormalInfo("Density", "$density"))
+      infos.add(NormalInfo("Density DPI", getDensityDpi()))
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+
+    display.getMetrics(metrics)
+    infos.add(
+        NormalInfo("Width", "${metrics.widthPixels} px")
+    )
+    infos.add(
+        NormalInfo("Height", "${metrics.heightPixels} px")
+    )
+    infos.addAll(getBarHeight())
+    val refreshRate = display.refreshRate
+    infos.add(NormalInfo("Refresh rate", "${refreshRate.round2()}"))
+
+    return infos
+  }
+
+  fun getDensity(): Float {
+    val windowManager = (context as Activity).windowManager
+    val display = windowManager.defaultDisplay
+    val metrics = DisplayMetrics()
+    display.getMetrics(metrics)
+    return metrics.density
+  }
+
+  fun getBarHeight(): ArrayList<NormalInfo> {
+
+    val res = context.resources
+    val infos = ArrayList<NormalInfo>()
+    var statusBarHeight = 0
+    val statusbarHeightResId = res.getIdentifier("status_bar_height", "dimen", "android")
+    if (statusbarHeightResId > 0) {
+      statusBarHeight = res.getDimensionPixelSize(statusbarHeightResId)
+    }
+    infos.add(
+        NormalInfo(
+            "Statusbar height", if (statusbarHeightResId == 0) "Unknown" else "$statusBarHeight px"
+        )
+    )
+    if (statusBarHeight > 0) {
+      infos.add(
+          NormalInfo(
+              "Statusbar height DP",
+              if (statusbarHeightResId == 0) "Unknown" else "${(statusBarHeight / getDensity()).toInt()} dp"
+          )
+      )
+    }
+    // action bar height
+    var actionBarHeight = 0
+    val styledAttributes = (context as Activity).getTheme()
+        .obtainStyledAttributes(
+            intArrayOf(android.R.attr.actionBarSize)
+        )
+    actionBarHeight = styledAttributes.getDimension(0, 0f)
+        .toInt()
+    styledAttributes.recycle()
+
+    infos.add(
+        NormalInfo(
+            "Actionbar height", "$actionBarHeight px"
+        )
+    )
+    if (actionBarHeight > 0) {
+      infos.add(
+          NormalInfo(
+              "Actionbar height dp", "${(actionBarHeight / getDensity()).toInt()} dp"
+          )
+      )
+    }
+
+    // navigation bar height
+    var navigationBarHeight = 0
+    val navbarHeightResId = res.getIdentifier("navigation_bar_height", "dimen", "android")
+    if (navbarHeightResId > 0) {
+      navigationBarHeight = res.getDimensionPixelSize(navbarHeightResId)
+    }
+
+    infos.add(
+        NormalInfo(
+            "Navigationbar height",
+            if (navbarHeightResId == 0) "Unknown" else "$navigationBarHeight px"
+        )
+    )
+    if (navigationBarHeight > 0) {
+      infos.add(
+          NormalInfo(
+              "Navigationbar height dp",
+              if (navbarHeightResId == 0) "Unknown" else "${(navigationBarHeight / getDensity()).toInt()} dp"
+          )
+      )
+    }
+
+    return infos
+  }
 
 }
