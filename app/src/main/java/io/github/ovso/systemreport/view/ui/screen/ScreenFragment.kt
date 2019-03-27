@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
-import io.github.ovso.systemreport.databinding.FragmentDeviceBinding
+import io.github.ovso.systemreport.databinding.FragmentScreenBinding
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter
-import kotlinx.android.synthetic.main.fragment_device.recyclerview_device
+import kotlinx.android.synthetic.main.fragment_screen.recyclerview_device
 
 class ScreenFragment : Fragment() {
 
@@ -35,8 +35,8 @@ class ScreenFragment : Fragment() {
     inflater: LayoutInflater,
     container: ViewGroup?
   ): View? {
-    val dataBinding: FragmentDeviceBinding =
-      DataBindingUtil.inflate(inflater, R.layout.fragment_device, container, false)
+    val dataBinding: FragmentScreenBinding =
+      DataBindingUtil.inflate(inflater, R.layout.fragment_screen, container, false)
     dataBinding.viewModel = provideViewModel()
     return dataBinding.root
   }
