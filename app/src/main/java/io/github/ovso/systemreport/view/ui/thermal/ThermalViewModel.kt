@@ -55,7 +55,7 @@ class ThermalViewModel(var context: Context) : ViewModel() {
     compositeDisposable.add(d)
   }
 
-  private fun getTempSensorList(): List<String> {
+  private fun getTempSensorPaths(): List<String> {
     try {
       val exec = Runtime.getRuntime()
           .exec(arrayOf("ls", "sys/class/thermal/"))
@@ -75,23 +75,40 @@ class ThermalViewModel(var context: Context) : ViewModel() {
 
   fun createInfos(): ArrayList<NormalInfo> {
     val infos = ArrayList<NormalInfo>()
-    val sensors = getTempSensorList();
-    for (sensor in sensors) {
-      infos.add(NormalInfo(getSensorType(sensor), getTemp(sensor)))
+    val paths = getTempSensorPaths();
+    val temps = ArrayList<Int>()
+    for (path in paths) {
+      val name = getName(path)
+      val tempInt = getTemp(path);
+      if (isTemperatureValid(tempInt)) {
+        infos.add(NormalInfo(name, "${tempInt}\u00B0C"))
+        temps.add(tempInt)
+      }
     }
+    infos.add(0, getTempAverage(temps))
     return infos
   }
 
-  fun getTemp(type: String): String {
+  private fun getTempAverage(temps: ArrayList<Int>): NormalInfo {
+    var sum: Int = 0;
+    for (temp in temps) {
+      sum += temp
+    }
+    var avg = sum / temps.size
+    (avg)
+    return NormalInfo("- Total Average -", "${avg}\u00B0C")
+  }
+
+  private fun isTemperatureValid(temp: Int): Boolean = temp in 0..250
+  fun getTemp(type: String): Int {
     val fp = RandomAccessFile("/sys/class/thermal/$type/temp", "r")
     val str = fp.readLine()
     fp.close()
-
-    return str;
-
+    return str.toInt()
+    //return "${str}\u00B0C" // temp * 9 / 5 + 32
   }
 
-  fun getSensorType(type: String): String {
+  fun getName(type: String): String {
     val raf = RandomAccessFile("sys/class/thermal/$type/type", "r")
     val readLine = raf.readLine()
     raf.close();

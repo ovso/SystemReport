@@ -1,5 +1,6 @@
 package io.github.ovso.systemreport.view.ui.battery
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import io.github.ovso.systemreport.service.model.NormalInfo
+import timber.log.Timber
 
 class BatteryViewModel(var context: Context) : ViewModel() {
   var batteryMod = EasyBatteryMod(context)
@@ -35,11 +37,12 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     infos.add(NormalInfo("Technology", getTechnology(intent)))
     infos.add(NormalInfo("Temperature", getTemperature(intent)))
     infos.add(NormalInfo("Voltage", getVoltage()))
+    infos.add(NormalInfo("Capacity", getBatteryCapacity()))
     return infos
   }
 
   private fun getVoltage(): String {
-    return "${batteryMod.batteryVoltage} mV"
+    return "${batteryMod.batteryVoltage / 1000.0}V"
   }
 
   private fun getTemperature(intent: Intent): String {
@@ -89,7 +92,7 @@ class BatteryViewModel(var context: Context) : ViewModel() {
   }
 
   private fun getHealth(intent: Intent): String {
-    var health: Int = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0)
+    val health: Int = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0)
     when (health) {
       BatteryManager.BATTERY_HEALTH_GOOD -> return "Good"
       BatteryManager.BATTERY_HEALTH_COLD -> return "Cold"
@@ -101,6 +104,34 @@ class BatteryViewModel(var context: Context) : ViewModel() {
     }
   }
 
+  /**
+   * @return battery capacity from private API. In case of error it will return -1.
+   */
+  @SuppressLint("PrivateApi")
+  fun getBatteryCapacity(): String {
+    var capacity = -1.0
+    try {
+      val powerProfile = Class.forName("com.android.internal.os.PowerProfile")
+          .getConstructor(Context::class.java)
+          .newInstance(context)
+      capacity = Class
+          .forName("com.android.internal.os.PowerProfile")
+          .getMethod("getAveragePower", String::class.java)
+          .invoke(powerProfile, "battery.capacity") as Double
+    } catch (e: Exception) {
+      Timber.e(e)
+    }
+    if (capacity != -1.0) {
+      return "${capacity}mAh"
+    } else {
+      return "Unknown"
+    }
+  }
+
+  //        val capacity = batteryStatusProvider.getBatteryCapacity().round2()
+//        if (capacity != -1.0) {
+//            functionsList.add(Pair(resources.getString(R.string.capacity), "${capacity}mAh"))
+//        }
   override fun onCleared() {
     super.onCleared()
     context.unregisterReceiver(broadcastReceiver)

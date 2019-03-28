@@ -52,6 +52,7 @@ class SystemFragment : Fragment() {
     recyclerview_system.adapter = adapter
     viewModel.infoLiveData.observe(this, Observer {
       adapter.items.addAll(it)
+      adapter.notifyDataSetChanged()
     })
     viewModel.fetchList();
   }
