@@ -1,15 +1,20 @@
 package io.github.ovso.systemreport.view.ui.sensor
 
-import androidx.lifecycle.ViewModelProviders
+import android.content.Context
+import android.hardware.SensorManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import github.nisrulz.easydeviceinfo.base.EasySensorMod
-
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
-import timber.log.Timber
+import io.github.ovso.systemreport.databinding.FragmentSensorsBinding
+import io.github.ovso.systemreport.view.ui._base.NormalAdapter
+import kotlinx.android.synthetic.main.fragment_sensors.recyclerview_sensors
 
 class SensorsFragment : Fragment() {
 
@@ -17,6 +22,7 @@ class SensorsFragment : Fragment() {
     fun newInstance() = SensorsFragment()
   }
 
+  private lateinit var adapter: NormalAdapter
   private lateinit var viewModel: SensorsViewModel
 
   override fun onCreateView(
@@ -24,17 +30,40 @@ class SensorsFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_sensors, container, false)
+    var databinding = DataBindingUtil.inflate<FragmentSensorsBinding>(
+        inflater, R.layout.fragment_system, container, false
+    )
+    viewModel = provideViewModel();
+    databinding.viewModel = viewModel
+    setupRecyclerView()
+    return databinding.root
   }
 
-  override fun onActivityCreated(savedInstanceState: Bundle?) {
-    super.onActivityCreated(savedInstanceState)
-    viewModel = ViewModelProviders.of(this)
+  private fun setupRecyclerView() {
+    adapter = NormalAdapter()
+    recyclerview_sensors.adapter = adapter
+  }
+
+  @Suppress("UNCHECKED_CAST")
+  private fun provideViewModel() =
+    ViewModelProviders.of(this, object : ViewModelProvider.Factory {
+      private fun getSensorManager(): SensorManager {
+        return context!!.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+      }
+      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return SensorsViewModel(context!!, getSensorManager()) as T
+      }
+    })
         .get(SensorsViewModel::class.java)
-    // TODO: Use the ViewModel
-    var easySensorMod = EasySensorMod(context)
-    var allSensors = easySensorMod.allSensors
-    Timber.d(allSensors.toString())
+
+  override fun onStart() {
+    super.onStart()
+    viewModel.startProvidingData()
+  }
+
+  override fun onStop() {
+    super.onStop()
+    viewModel.stopProvidingData()
   }
 
 }

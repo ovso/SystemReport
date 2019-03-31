@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.ui.sensor.SensorsFragment"
-    android:background="@android:color/black"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-
-  <TextView
+  <data>
+    <variable
+        name="viewModel"
+        type="io.github.ovso.systemreport.view.ui.sensor.SensorsViewModel"
+        />
+  </data>
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recyclerview_sensors"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:text="Sensors"
+      android:background="@android:color/black"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       />
-
-</FrameLayout>
+</layout>

@@ -8,3 +8,4 @@ fun Double.roundTo2DecimalPlaces() =
 fun Float.round2(): Float = Math.round(this * 100.0) / 100.0f
 fun Double.round2(): Double = Math.round(this * 100.0) / 100.0
 fun Double.round1(): Double = Math.round(this * 10.0) / 10.0
+fun Float.round1(): Float = Math.round(this * 10.0) / 10.0f
