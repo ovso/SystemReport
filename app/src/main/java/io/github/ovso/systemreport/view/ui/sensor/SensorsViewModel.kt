@@ -18,11 +18,14 @@ class SensorsViewModel(
   val infoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
   private val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
 
+  init {
+    infoLiveData.value = ArrayList()
+  }
+
   override fun onAccuracyChanged(
     sensor: Sensor?,
     accuracy: Int
   ) {
-    TODO("not implemented")
   }
 
   override fun onSensorChanged(event: SensorEvent) {
@@ -75,7 +78,7 @@ class SensorsViewModel(
     return data
   }
 
-    fun startProvidingData() {
+  fun startProvidingData() {
     if (infoLiveData.value!!.isEmpty()) {
       infoLiveData.value!!.addAll(sensorList.map { NormalInfo(it.name, " ") })
     }
