@@ -38,11 +38,6 @@ class NormalAdapter : RecyclerView.Adapter<NormalViewHolder>() {
     this.items.addAll(it)
   }
 
-  fun addItems(it: List<NormalInfo>) {
-    this.items.clear()
-    this.items.addAll(it)
-  }
-
   class NormalViewHolder(
     override val containerView: View?
   ) : RecyclerView.ViewHolder(containerView!!), LayoutContainer {

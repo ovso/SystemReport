@@ -14,9 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentSensorsBinding
-import io.github.ovso.systemreport.view.ui._base.NormalAdapter
 import kotlinx.android.synthetic.main.fragment_sensors.recyclerview_sensors
-import timber.log.Timber
 
 class SensorsFragment : Fragment() {
 
@@ -24,7 +22,7 @@ class SensorsFragment : Fragment() {
     fun newInstance() = SensorsFragment()
   }
 
-  private lateinit var adapter: NormalAdapter
+  private lateinit var adapter: SensorsAdapter
   private lateinit var viewModel: SensorsViewModel
 
   override fun onCreateView(
@@ -50,7 +48,7 @@ class SensorsFragment : Fragment() {
       adapter.items[it] = viewModel.infoLiveData.value!!.get(it)
       adapter.notifyItemChanged(it)
     })
-    adapter = NormalAdapter()
+    adapter = SensorsAdapter()
     recyclerview_sensors.adapter = adapter
   }
 
