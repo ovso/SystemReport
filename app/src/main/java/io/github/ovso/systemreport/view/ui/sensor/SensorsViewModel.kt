@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel;
 import io.github.ovso.systemreport.service.model.NormalInfo
@@ -15,12 +16,9 @@ class SensorsViewModel(
   private var sensorManager: SensorManager
 ) : ViewModel(), SensorEventListener {
 
-  val infoLiveData = MutableLiveData<ArrayList<NormalInfo>>()
+  val infoLiveData = MutableLiveData<ArrayList<NormalInfo>>(ArrayList())
+  val updatedRowIdLiveData = MutableLiveData<Int>()
   private val sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL)
-
-  init {
-    infoLiveData.value = ArrayList()
-  }
 
   override fun onAccuracyChanged(
     sensor: Sensor?,
@@ -36,6 +34,7 @@ class SensorsViewModel(
   private fun updateSensorInfo(event: SensorEvent) {
     val updatedRowId = sensorList.indexOf(event.sensor)
     infoLiveData.value!![updatedRowId] = NormalInfo(event.sensor.name, getSensorData(event))
+    updatedRowIdLiveData.value = updatedRowId
   }
 
   /**

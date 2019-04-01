@@ -43,9 +43,12 @@ class SensorsFragment : Fragment() {
   private fun setupRecyclerView() {
 
     viewModel.infoLiveData.observe(viewLifecycleOwner, Observer {
-      Timber.d("Observer")
       adapter.items.addAll(it)
       adapter.notifyDataSetChanged()
+    })
+    viewModel.updatedRowIdLiveData.observe(viewLifecycleOwner, Observer {
+      adapter.items[it] = viewModel.infoLiveData.value!!.get(it)
+      adapter.notifyItemChanged(it)
     })
     adapter = NormalAdapter()
     recyclerview_sensors.adapter = adapter
