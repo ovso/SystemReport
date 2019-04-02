@@ -72,7 +72,22 @@ class SensorsViewModel(
         data = "Relative humidity=${event.values[0].round1()}%"
       Sensor.TYPE_TEMPERATURE ->
         data = "Device temperature=${event.values[0].round1()}°C"
+      Sensor.TYPE_GYROSCOPE_UNCALIBRATED ->
+        data = "X=${event.values[0].round1()}rad/s  Y=${
+        event.values[1].round1()}rad/s  Z=${
+        event.values[2].round1()}rad/s"
+      Sensor.TYPE_GAME_ROTATION_VECTOR ->
+        data = "X=${event.values[0].round1()}  Y=${
+        event.values[1].round1()}  Z=${event.values[2].round1()}"
+      Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED ->
+        data = "X=${event.values[0].round1()}μT  Y=${
+        event.values[1].round1()}μT  Z=${
+        event.values[2].round1()}μT"
+      Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR ->
+        data = "X=${event.values[0].round1()}  Y=${
+        event.values[1].round1()}  Z=${event.values[2].round1()}"
     }
+
     return data
   }
 

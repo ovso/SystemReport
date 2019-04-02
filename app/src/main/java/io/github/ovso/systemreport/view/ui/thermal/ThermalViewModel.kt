@@ -28,6 +28,7 @@ class ThermalViewModel(var context: Context) : ViewModel() {
             .subscribeBy(
                 onError = {
                   Timber.e(it)
+                  handleEmpty()
                 },
                 onNext = {
                   if (!it.isEmpty()) {
@@ -36,18 +37,23 @@ class ThermalViewModel(var context: Context) : ViewModel() {
                   }
                 })
     )
+  }
 
+  private fun handleEmpty() {
+    val unknowns = ArrayList<NormalInfo>()
+    unknowns.add(NormalInfo("Unknown", ""))
+    infoLiveData.value = unknowns
   }
 
   private fun startInterval() {
     val d = Observable.interval(3000, MILLISECONDS)
-        .map { t -> createInfos() }
+        .map {
+          createInfos()
+        }
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeBy(onError = {
           Timber.e(it)
-          compositeDisposable.clear()
-          infoLiveData.value = ArrayList()
           handleEmpty()
         }, onNext = {
           infoLiveData.value = it
@@ -55,33 +61,27 @@ class ThermalViewModel(var context: Context) : ViewModel() {
     compositeDisposable.add(d)
   }
 
-  private fun getTempSensorPaths(): List<String> {
-    try {
-      val exec = Runtime.getRuntime()
-          .exec(arrayOf("ls", "sys/class/thermal/"))
-      exec.waitFor()
-      val reader = BufferedReader(InputStreamReader(exec.inputStream))
-      return reader.readLines()
-          .sorted()
-    } catch (e: Exception) {
-      Timber.e(e)
-      return ArrayList()
-    }
+  private fun getTempSensorPaths(): List<String> = try {
+    val exec = Runtime.getRuntime()
+        .exec(arrayOf("ls", "sys/class/thermal/"))
+    exec.waitFor()
+    val reader = BufferedReader(InputStreamReader(exec.inputStream))
+    reader.readLines()
+        .sorted()
+  } catch (e: Exception) {
+    Timber.e(e)
+    ArrayList()
   }
 
-  private fun handleEmpty() {
-
-  }
-
-  fun createInfos(): ArrayList<NormalInfo> {
+  private fun createInfos(): ArrayList<NormalInfo> {
     val infos = ArrayList<NormalInfo>()
-    val paths = getTempSensorPaths();
+    val paths = getTempSensorPaths()
     val temps = ArrayList<Int>()
     for (path in paths) {
       val name = getName(path)
-      val tempInt = getTemp(path);
+      val tempInt = getTemp(path)
       if (isTemperatureValid(tempInt)) {
-        infos.add(NormalInfo(name, "${tempInt}\u00B0C"))
+        infos.add(NormalInfo(name, "$tempInt\u00B0C"))
         temps.add(tempInt)
       }
     }
@@ -90,29 +90,27 @@ class ThermalViewModel(var context: Context) : ViewModel() {
   }
 
   private fun getTempAverage(temps: ArrayList<Int>): NormalInfo {
-    var sum: Int = 0;
-    for (temp in temps) {
-      sum += temp
-    }
-    var avg = sum / temps.size
-    (avg)
-    return NormalInfo("- Total Average -", "${avg}\u00B0C")
+    var sum = 0
+    for (temp in temps) sum += temp
+
+    val avg = sum / temps.size
+    return NormalInfo("- Total Average -", "$avg\u00B0C")
   }
 
   private fun isTemperatureValid(temp: Int): Boolean = temp in 0..250
-  fun getTemp(type: String): Int {
+
+  private fun getTemp(type: String): Int {
     val fp = RandomAccessFile("/sys/class/thermal/$type/temp", "r")
     val str = fp.readLine()
     fp.close()
     return str.toInt()
-    //return "${str}\u00B0C" // temp * 9 / 5 + 32
   }
 
-  fun getName(type: String): String {
+  private fun getName(type: String): String {
     val raf = RandomAccessFile("sys/class/thermal/$type/type", "r")
     val readLine = raf.readLine()
-    raf.close();
-    return readLine;
+    raf.close()
+    return readLine
   }
 
   override fun onCleared() {
