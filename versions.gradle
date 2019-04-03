@@ -30,6 +30,7 @@ versions.core_ktx = '1.0.1'
 versions.lifecycle_viewmodel_ktx = '2.0.0'
 versions.lifecycle_extensions = '2.1.0-alpha02'
 versions.annotation = '1.0.2'
+versions.legacy_preference_v14 = '1.0.0'
 
 def deps = [:]
 
@@ -46,6 +47,8 @@ androidx.lifecycle_viewmodel_ktx =
     "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle_viewmodel_ktx"
 androidx.lifecycle_extensions =
     "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle_extensions"
+androidx.legacy_preference_v14 =
+    "androidx.legacy:legacy-preference-v14:$versions.legacy_preference_v14"
 deps.androidx = androidx
 
 def atsl = [:]
@@ -121,6 +124,7 @@ ext.build_version = build_version
 static def addRepos(RepositoryHandler handler) {
   handler.google()
   handler.jcenter()
+  handler.mavenCentral()
   handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
   handler.maven { url 'https://maven.fabric.io/public' }
   handler.maven { url "https://jitpack.io" }
