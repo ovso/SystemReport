@@ -15,4 +15,12 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 
+    fun makeArrayConsecutive2(statues: MutableList<Int>): Int {
+        val max = statues.max()!!
+        val min = statues.min()!!
+        val btween = max - min
+        return btween - statues.size + 1
+        return 0;
+    }
+
 }

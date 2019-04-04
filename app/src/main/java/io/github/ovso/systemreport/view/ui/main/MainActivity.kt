@@ -19,6 +19,7 @@ import io.github.ovso.systemreport.databinding.ActivityMainBinding
 import io.github.ovso.systemreport.view.ui.battery.BatteryFragment
 import io.github.ovso.systemreport.view.ui.screen.ScreenFragment
 import io.github.ovso.systemreport.view.ui.sensor.SensorsFragment
+import io.github.ovso.systemreport.view.ui.settings.SettingsFragment
 import io.github.ovso.systemreport.view.ui.system.SystemFragment
 import io.github.ovso.systemreport.view.ui.thermal.ThermalFragment
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
@@ -122,10 +123,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       id.nav_sensors -> {
         showSensorsFragment()
       }
+      id.nav_settings -> {
+        showSettingsFragment()
+      }
     }
 
     drawer_layout.closeDrawer(GravityCompat.START)
     return true
+  }
+
+  private fun showSettingsFragment() {
+    supportFragmentManager.beginTransaction()
+        .replace(id.framelayout_main_fcontainer, SettingsFragment.newInstance())
+        .commitNow()
   }
 
   private fun showScreenFragment() {
