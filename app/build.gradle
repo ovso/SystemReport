@@ -67,6 +67,8 @@ dependencies {
 
   implementation deps.easydeviceinfo
 
+  implementation deps.licensedialog
+
   testImplementation deps.atsl.junit
   androidTestImplementation deps.atsl.runner
   androidTestImplementation deps.atsl.espressocore

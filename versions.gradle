@@ -31,6 +31,7 @@ versions.lifecycle_viewmodel_ktx = '2.0.0'
 versions.lifecycle_extensions = '2.1.0-alpha02'
 versions.annotation = '1.0.2'
 versions.legacy_preference_v14 = '1.0.0'
+versions.licensedialog = '2.0.0'
 
 def deps = [:]
 
@@ -102,6 +103,7 @@ deps.jsr250_api = "javax.annotation:jsr250-api:$versions.jsr250_api"
 deps.lottie = "com.airbnb.android:lottie:$versions.lottie"
 deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
 deps.easydeviceinfo = "com.github.nisrulz:easydeviceinfo:$versions.easydeviceinfo"
+deps.licensedialog = "de.psdev.licensesdialog:licensesdialog:$versions.licensedialog"
 
 ext.deps = deps
 

@@ -9,11 +9,11 @@
       android:entryValues="@array/prefs_temperature_values"
       android:key="temperature_unit"
       android:title="@string/temperature_unit"
-      android:summary="&#176;C"
       app:iconSpaceReserved="false"/>
 
   <Preference
       android:title="@string/prefs_opensource"
+      android:key="opensource"
       app:iconSpaceReserved="false"
       >
 
