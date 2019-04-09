@@ -48,5 +48,11 @@
     <copyright>Copyright 2014 Pixplicity (http://pixplicity.com)</copyright>
     <license>Apache Software License 2.0</license>
   </notice>
+  <notice>
+    <name>cpu-info</name>
+    <url>https://github.com/kamgurgul/cpu-info</url>
+    <copyright>Copyright 2017 KG Soft</copyright>
+    <license>Apache Software License 2.0</license>
+  </notice>
 
 </notices>
