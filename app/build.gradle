@@ -60,14 +60,14 @@ dependencies {
   implementation deps.okhttp.runtime
   implementation deps.okhttp.logging_interceptor
 
-  implementation deps.timber
-
   implementation deps.glide.runtime
   kapt deps.glide.compiler
 
   implementation deps.easydeviceinfo
-
   implementation deps.licensedialog
+  implementation deps.timber
+  implementation deps.easyprefs
+
 
   testImplementation deps.atsl.junit
   androidTestImplementation deps.atsl.runner

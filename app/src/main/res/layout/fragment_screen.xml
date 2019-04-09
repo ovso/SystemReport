@@ -3,19 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.ui.screen.ScreenFragment"
+    tools:context=".view.ui.feature.screen.ScreenFragment"
     >
   <data>
     <variable
         name="viewModel"
-        type="io.github.ovso.systemreport.view.ui.screen.ScreenViewModel"
+        type="io.github.ovso.systemreport.view.ui.feature.screen.ScreenViewModel"
         />
   </data>
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recyclerview_device"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@android:color/black"
       android:scrollbars="vertical"
       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       />

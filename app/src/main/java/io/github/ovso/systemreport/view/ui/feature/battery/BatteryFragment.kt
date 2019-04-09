@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.battery
+package io.github.ovso.systemreport.view.ui.feature.battery
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -47,6 +47,7 @@ class BatteryFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     setupRecyclerView()
+    activity!!.title = "Battery"
   }
 
   private fun setupRecyclerView() {

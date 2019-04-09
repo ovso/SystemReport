@@ -1,13 +1,11 @@
-package io.github.ovso.systemreport.view.ui.soc
+package io.github.ovso.systemreport.view.ui.feature.soc
 
 import android.content.Context
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.github.ovso.systemreport.service.model.NormalInfo
-import io.github.ovso.systemreport.utils.Devices
 import io.github.ovso.systemreport.view.ui.main.CMDExecute
-import timber.log.Timber
 
 class SocViewModel(context: Context) : ViewModel() {
   var socInfoLiveData = MutableLiveData<ArrayList<NormalInfo>>()

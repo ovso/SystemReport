@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.system
+package io.github.ovso.systemreport.view.ui.feature.system
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -49,6 +49,7 @@ class SystemFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
+    activity!!.title = "System"
     recyclerview_system.adapter = adapter
     viewModel.infoLiveData.observe(this, Observer {
       adapter.items.addAll(it)
@@ -57,12 +58,4 @@ class SystemFragment : Fragment() {
     viewModel.fetchList();
   }
 
-  override fun onPause() {
-    super.onPause()
-
-  }
-
-  override fun onResume() {
-    super.onResume()
-  }
 }

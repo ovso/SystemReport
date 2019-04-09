@@ -6,13 +6,12 @@
   <data>
     <variable
         name="viewModel"
-        type="io.github.ovso.systemreport.view.ui.system.SystemViewModel"
+        type="io.github.ovso.systemreport.view.ui.feature.system.SystemViewModel"
         />
   </data>
   <androidx.core.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@android:color/black"
       android:scrollbars="vertical"
       >
     <LinearLayout

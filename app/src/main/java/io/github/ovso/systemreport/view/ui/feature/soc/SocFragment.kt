@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.soc
+package io.github.ovso.systemreport.view.ui.feature.soc
 
 import android.os.Bundle
 import android.view.LayoutInflater

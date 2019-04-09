@@ -42,5 +42,11 @@
     <copyright>Copyright 2016 Nishant Srivastava</copyright>
     <license>Apache Software License 2.0</license>
   </notice>
+  <notice>
+    <name>EasyPrefs</name>
+    <url>https://github.com/Pixplicity/EasyPrefs</url>
+    <copyright>Copyright 2014 Pixplicity (http://pixplicity.com)</copyright>
+    <license>Apache Software License 2.0</license>
+  </notice>
 
 </notices>

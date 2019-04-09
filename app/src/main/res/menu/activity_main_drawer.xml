@@ -6,27 +6,19 @@
   <group android:checkableBehavior="single">
     <item
         android:id="@+id/nav_screen"
-        android:icon="@drawable/ic_menu_camera"
+        android:icon="@drawable/ic_smartphone"
         android:title="Screen"/>
     <item
         android:id="@+id/nav_battery"
-        android:icon="@drawable/ic_menu_slideshow"
+        android:icon="@drawable/ic_battery"
         android:title="Battery"/>
     <item
         android:id="@+id/nav_system"
-        android:icon="@drawable/ic_menu_gallery"
+        android:icon="@drawable/ic_android"
         android:title="System"/>
     <item
-        android:id="@+id/nav_thermal"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="Thermal"/>
-    <item
-        android:id="@+id/nav_sensors"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="Sensors"/>
-    <item
         android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_menu_manage"
+        android:icon="@drawable/ic_settings"
         android:title="Settings"/>
   </group>
 
@@ -37,9 +29,9 @@
           android:icon="@drawable/ic_menu_share"
           android:title="Share"/>
       <item
-          android:id="@+id/nav_send"
-          android:icon="@drawable/ic_menu_send"
-          android:title="Send"/>
+          android:id="@+id/nav_review"
+          android:icon="@drawable/ic_review"
+          android:title="Review"/>
     </menu>
   </item>
 

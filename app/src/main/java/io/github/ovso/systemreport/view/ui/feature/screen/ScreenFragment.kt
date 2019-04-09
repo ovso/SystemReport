@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.screen
+package io.github.ovso.systemreport.view.ui.feature.screen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentScreenBinding
+import io.github.ovso.systemreport.utils.DividerItemDecoration
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter
 import kotlinx.android.synthetic.main.fragment_screen.recyclerview_device
 
@@ -54,9 +55,13 @@ class ScreenFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     setup()
+    activity!!.title = "Screen"
   }
 
   private fun setup() {
+    recyclerview_device.addItemDecoration(
+        DividerItemDecoration(requireContext(), android.R.color.black)
+    )
     recyclerview_device.adapter = NormalAdapter()
     viewModel.infoLiveData.observe(this, Observer {
       (recyclerview_device.adapter as NormalAdapter).items.addAll(it)

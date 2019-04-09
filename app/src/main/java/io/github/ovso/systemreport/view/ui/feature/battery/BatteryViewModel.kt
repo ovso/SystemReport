@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.battery
+package io.github.ovso.systemreport.view.ui.feature.battery
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
 import io.github.ovso.systemreport.service.model.NormalInfo
+import io.github.ovso.systemreport.utils.TempFormatter
 import timber.log.Timber
 
 class BatteryViewModel(var context: Context) : ViewModel() {
@@ -47,7 +48,7 @@ class BatteryViewModel(var context: Context) : ViewModel() {
 
   private fun getTemperature(intent: Intent): String {
     var temp = (intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) / 10.0).toFloat()
-    return "$temp \u2103"
+    return TempFormatter().format(temp)
   }
 
   fun getTechnology(intent: Intent) = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY)

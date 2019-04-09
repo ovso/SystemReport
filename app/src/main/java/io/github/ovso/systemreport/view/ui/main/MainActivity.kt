@@ -1,5 +1,6 @@
 package io.github.ovso.systemreport.view.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,22 +12,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.navigation.NavigationView
-import io.github.ovso.systemreport.R
-import io.github.ovso.systemreport.R.id
-import io.github.ovso.systemreport.R.layout
-import io.github.ovso.systemreport.R.string
 import io.github.ovso.systemreport.databinding.ActivityMainBinding
-import io.github.ovso.systemreport.view.ui.battery.BatteryFragment
-import io.github.ovso.systemreport.view.ui.screen.ScreenFragment
-import io.github.ovso.systemreport.view.ui.sensor.SensorsFragment
-import io.github.ovso.systemreport.view.ui.settings.SettingsFragment
-import io.github.ovso.systemreport.view.ui.system.SystemFragment
-import io.github.ovso.systemreport.view.ui.thermal.ThermalFragment
+import io.github.ovso.systemreport.view.ui.feature.battery.BatteryFragment
+import io.github.ovso.systemreport.view.ui.feature.screen.ScreenFragment
+import io.github.ovso.systemreport.view.ui.feature.settings.SettingsFragment
+import io.github.ovso.systemreport.view.ui.feature.system.SystemFragment
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
+import android.net.Uri
+import io.github.ovso.systemreport.R
 
-//https://github.com/kamgurgul/cpu-info
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var viewModel: MainViewModel? = null
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +50,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   private fun setupDrawerLayout() {
     val toggle = ActionBarDrawerToggle(
-        this, drawer_layout, toolbar, string.navigation_drawer_open,
-        string.navigation_drawer_close
+        this, drawer_layout, toolbar, R.string.navigation_drawer_open,
+        R.string.navigation_drawer_close
     )
     drawer_layout.addDrawerListener(toggle)
     toggle.syncState()
@@ -69,7 +65,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     setupViewModel()
     var binding: ActivityMainBinding = DataBindingUtil.setContentView(
         this,
-        layout.activity_main
+        R.layout.activity_main
     )
 
     if (savedInstanceState == null) {
@@ -100,7 +96,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // automatically handle clicks on the Home/Up button, so long
     // as you specify a parent activity in AndroidManifest.xml.
     when (item.itemId) {
-      id.action_settings -> return true
+      R.id.action_settings -> return true
       else -> return super.onOptionsItemSelected(item)
     }
   }
@@ -108,23 +104,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     // Handle navigation view item clicks here.
     when (item.itemId) {
-      id.nav_screen -> {
+      R.id.nav_screen -> {
         showScreenFragment()
       }
-      id.nav_battery -> {
+      R.id.nav_battery -> {
         showBatteryFragment()
       }
-      id.nav_system -> {
+      R.id.nav_system -> {
         showSystemFragment()
       }
-      id.nav_thermal -> {
-        showThermalFragment()
-      }
-      id.nav_sensors -> {
-        showSensorsFragment()
-      }
-      id.nav_settings -> {
+      R.id.nav_settings -> {
         showSettingsFragment()
+      }
+      R.id.nav_share -> {
+        navigateToShare()
+      }
+      R.id.nav_review -> {
+        navigateToReview()
       }
     }
 
@@ -132,27 +128,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     return true
   }
 
+  private fun navigateToReview() {
+    try {
+      startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
+    } catch (anfe: android.content.ActivityNotFoundException) {
+      startActivity(
+          Intent(
+              Intent.ACTION_VIEW,
+              Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+          )
+      )
+    }
+
+  }
+
+  private fun navigateToShare() {
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.addCategory(Intent.CATEGORY_DEFAULT);
+    intent.putExtra(Intent.EXTRA_TITLE, "Share");
+    intent.setType("text/plain");
+    intent.putExtra(Intent.EXTRA_TEXT, "market://details?id=$packageName");
+    startActivity(Intent.createChooser(intent, "김지민앤컴퍼니 화이팅 입니다"));
+  }
+
   private fun showSettingsFragment() {
     supportFragmentManager.beginTransaction()
-        .replace(id.framelayout_main_fcontainer, SettingsFragment.newInstance())
+        .replace(R.id.framelayout_main_fcontainer, SettingsFragment.newInstance())
         .commitNow()
   }
 
   private fun showScreenFragment() {
     supportFragmentManager.beginTransaction()
         .replace(R.id.framelayout_main_fcontainer, ScreenFragment.newInstance())
-        .commitNow();
-  }
-
-  private fun showSensorsFragment() {
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.framelayout_main_fcontainer, SensorsFragment.newInstance())
-        .commitNow();
-  }
-
-  private fun showThermalFragment() {
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.framelayout_main_fcontainer, ThermalFragment.newInstance())
         .commitNow();
   }
 

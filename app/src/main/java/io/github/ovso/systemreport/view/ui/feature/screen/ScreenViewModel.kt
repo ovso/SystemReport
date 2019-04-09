@@ -1,4 +1,4 @@
-package io.github.ovso.systemreport.view.ui.screen
+package io.github.ovso.systemreport.view.ui.feature.screen
 
 import android.app.Activity
 import android.content.Context

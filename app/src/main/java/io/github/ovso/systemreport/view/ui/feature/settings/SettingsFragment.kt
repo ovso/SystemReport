@@ -1,11 +1,7 @@
-package io.github.ovso.systemreport.view.ui.settings
+package io.github.ovso.systemreport.view.ui.feature.settings
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.Preference.OnPreferenceClickListener
@@ -49,6 +45,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     tempUnitPreference = preferenceScreen.findPreference(KEY_TEMPERATURE_UNIT) as ListPreference
     (preferenceScreen.findPreference(KEY_OPENSOURCE) as Preference).onPreferenceClickListener = this
+
+    activity!!.title = "Settings"
   }
 
   override fun onResume() {
@@ -62,13 +60,4 @@ class SettingsFragment : PreferenceFragmentCompat(),
     preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
   }
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    val view = super.onCreateView(inflater, container, savedInstanceState)
-    view?.setBackgroundColor(ContextCompat.getColor(context!!, android.R.color.black))
-    return view
-  }
 }

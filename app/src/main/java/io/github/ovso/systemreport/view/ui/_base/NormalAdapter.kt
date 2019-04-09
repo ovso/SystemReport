@@ -1,9 +1,13 @@
 package io.github.ovso.systemreport.view.ui._base
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.service.model.NormalInfo
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter.NormalViewHolder
@@ -47,6 +51,18 @@ class NormalAdapter : RecyclerView.Adapter<NormalViewHolder>() {
       textview_allviewholder_name.isSelected = true
       textview_allviewholder_value.text = item.value
       textview_allviewholder_value.isSelected = true
+      itemView.setOnLongClickListener {
+        val context = it.context
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE)
+            as ClipboardManager
+        val clip = ClipData.newPlainText(
+            context.getString(R.string.app_name),
+            item.value
+        )
+        clipboard.primaryClip = clip
+        Snackbar.make(itemView,"복사했어요.",Snackbar.LENGTH_SHORT).show()
+        true
+      }
     }
 
     companion object {
