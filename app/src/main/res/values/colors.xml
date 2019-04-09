@@ -4,4 +4,18 @@
   <color name="colorPrimaryDark">#00574B</color>
   <color name="colorAccent">#D81B60</color>
   <color name="colorBackground">#FFA3CCA3</color>
+  <color name="textColorPrimary">#FFFFFF</color>
+  <color name="textColorSecondary">#FFFFFF</color>
+  <color name="background">#2F3136</color>
+  <color name="backgroundDark">#202225</color>
+
+  <color name="black">#000000</color>
+  <color name="white">#FFFFFF</color>
+  <color name="red">#FF0000</color>
+
+  <color name="drawerNoShadow">#00000000</color>
+
+  <color name="blueLight">#2979FF</color>
+  <color name="progressBackground">#E4E5E7</color>
+  <color name="greyText">#EEEEEE</color>
 </resources>
