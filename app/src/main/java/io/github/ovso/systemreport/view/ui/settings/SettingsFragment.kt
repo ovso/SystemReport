@@ -17,7 +17,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener, OnPreferenceClickListener {
   override fun onPreferenceClick(preference: Preference?): Boolean {
     LicensesDialog.Builder(activity!!)
-        .setNotices(io.github.ovso.systemreport.R.raw.notices)
+        .setNotices(R.raw.notices)
         .build()
         .show()
     return true
