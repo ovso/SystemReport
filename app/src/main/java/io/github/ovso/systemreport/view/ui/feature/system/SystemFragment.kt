@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.FragmentSystemBinding
+import io.github.ovso.systemreport.utils.DividerItemDecoration
 import io.github.ovso.systemreport.view.ui._base.NormalAdapter
 import kotlinx.android.synthetic.main.fragment_system.recyclerview_system
 
@@ -50,6 +51,7 @@ class SystemFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     activity!!.title = "System"
+    recyclerview_system.addItemDecoration(DividerItemDecoration(requireContext()))
     recyclerview_system.adapter = adapter
     viewModel.infoLiveData.observe(this, Observer {
       adapter.items.addAll(it)
