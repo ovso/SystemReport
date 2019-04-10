@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     intent.putExtra(Intent.EXTRA_TITLE, "Share");
     intent.setType("text/plain");
     intent.putExtra(Intent.EXTRA_TEXT, "market://details?id=$packageName");
-    startActivity(Intent.createChooser(intent, "김지민앤컴퍼니 화이팅 입니다"));
+    startActivity(Intent.createChooser(intent, "App share"));
   }
 
   private fun showSettingsFragment() {
