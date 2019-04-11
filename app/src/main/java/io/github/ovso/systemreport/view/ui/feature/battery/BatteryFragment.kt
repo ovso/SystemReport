@@ -48,7 +48,7 @@ class BatteryFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     setupRecyclerView()
-    activity!!.title = "Battery"
+    activity?.setTitle(R.string.nav_battery)
   }
 
   private fun setupRecyclerView() {

@@ -1,0 +1,19 @@
+<resources>
+  <string name="app_name">تقارير النظام</string>
+  <string name="navigation_drawer_open">افتح درج التنقل</string>
+  <string name="navigation_drawer_close">أغلق درج التنقل </string>
+  <string name="nav_header_title">Android Studio</string>
+  <string name="nav_header_subtitle">android.studio@android.com</string>
+  <string name="nav_header_desc">رأس التنقل</string>
+  <string name="action_settings">الإعدادات</string>
+  <string name="temperature_unit">وحدة درجة الحرارة</string>
+  <string name="prefs_opensource">ترخيص المصدر المفتوح</string>
+  <string name="all_copied">قمت بنسخ القيمة.</string>
+  <string name="nav_screen">الشاشة</string>
+  <string name="nav_battery">البطارية</string>
+  <string name="nav_system">النظام</string>
+  <string name="nav_settings">الإعدادات</string>
+  <string name="nav_communicate">الاتصالات </string>
+  <string name="nav_share">المشاركة</string>
+  <string name="nav_review">مراجعة</string>
+</resources>

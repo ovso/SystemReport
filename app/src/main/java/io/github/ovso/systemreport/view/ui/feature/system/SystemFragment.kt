@@ -50,7 +50,7 @@ class SystemFragment : Fragment() {
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
-    activity!!.title = "System"
+    activity?.setTitle(R.string.nav_system)
     recyclerview_system.addItemDecoration(DividerItemDecoration(requireContext()))
     recyclerview_system.adapter = adapter
     viewModel.infoLiveData.observe(this, Observer {

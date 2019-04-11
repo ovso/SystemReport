@@ -46,7 +46,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
     tempUnitPreference = preferenceScreen.findPreference(KEY_TEMPERATURE_UNIT) as ListPreference
     (preferenceScreen.findPreference(KEY_OPENSOURCE) as Preference).onPreferenceClickListener = this
 
-    activity!!.title = "Settings"
+    activity?.setTitle(R.string.nav_settings)
   }
 
   override fun onResume() {

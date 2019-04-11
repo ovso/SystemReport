@@ -1,0 +1,19 @@
+<resources>
+  <string name="app_name"> सिस्टम रिपोर्ट </string>
+  <string name="navigation_drawer_open"> नेविगेशन नेविगेशन खोलें </string>
+  <string name="navigation_drawer_close"> नेविगेशन ड्रावर बंद करें </string>
+  <string name="nav_header_title"> Android Studio </string>
+  <string name="nav_header_subtitle"> android.studio@android.com </string>
+  <string name="nav_header_desc"> नेविगेशन हेडर </string>
+  <string name="action_settings"> सेटिंग्स </string>
+  <string name="temperature_unit"> तापमान इकाई </string>
+  <string name="prefs_opensource"> ओपन सोर्स लाइसेंस </string>
+  <string name="all_copied"> मैंने मान कॉपी किया। </string>
+  <string name="nav_screen"> स्क्रीन </string>
+  <string name="nav_battery"> बैटरी </string>
+  <string name="nav_system"> सिस्टम </string>
+  <string name="nav_settings"> Settings </string>
+  <string name="nav_communicate"> संचार </string>
+  <string name="nav_share"> शेयरिंग </string>
+  <string name="nav_review"> समीक्षा </string>
+</resources>

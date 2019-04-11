@@ -55,7 +55,7 @@ class ScreenFragment : Fragment() {
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
     setup()
-    activity!!.title = "Screen"
+    activity?.setTitle(R.string.nav_screen)
   }
 
   private fun setup() {

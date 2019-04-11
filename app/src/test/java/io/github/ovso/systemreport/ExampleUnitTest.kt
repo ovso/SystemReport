@@ -19,8 +19,8 @@ class ExampleUnitTest {
 
   fun almostIncreasingSequence(sequence: MutableList<Int>): Boolean {
     sequence.sort()
-    for (i in 0..(sequence.size - 2)) {
-      if (sequence.get(i) + 1 != sequence.get(i + 1)) {
+    for (i in 0..(sequence.lastIndex - 1)) {
+      if (sequence[i] + 1 != sequence[i + 1]) {
         return false;
       }
     }
@@ -29,11 +29,7 @@ class ExampleUnitTest {
 
   fun almostIncreasingSequence2(sequence: MutableList<Int>): Boolean {
     sequence.sort()
-    for (i in 0..(sequence.size - 2)) {
-      if (sequence.get(i) + 1 != sequence.get(i + 1)) {
-        return false;
-      }
-    }
+
     return true
   }
 }
