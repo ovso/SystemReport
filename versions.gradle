@@ -33,7 +33,8 @@ versions.annotation = '1.0.2'
 versions.legacy_preference_v14 = '1.0.0'
 versions.licensedialog = '2.0.0'
 versions.easyprefs = '1.9.0'
-
+versions.firebase_ads = '17.2.0'
+versions.google_service = '4.2.0'
 def deps = [:]
 
 def androidx = [:]
@@ -52,6 +53,10 @@ androidx.lifecycle_extensions =
 androidx.legacy_preference_v14 =
     "androidx.legacy:legacy-preference-v14:$versions.legacy_preference_v14"
 deps.androidx = androidx
+
+def firebase = [:]
+firebase.ads = "com.google.firebase:firebase-ads:$versions.firebase_ads"
+deps.firebase = firebase
 
 def atsl = [:]
 atsl.junit = "junit:junit:$versions.junit"
@@ -112,6 +117,7 @@ ext.deps = deps
 def class_path = [:]
 class_path.android_gradle = "com.android.tools.build:gradle:$versions.android_gradle"
 class_path.kotlin_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+class_path.google_service = "com.google.gms:google-services:$versions.google_service"
 
 ext.class_path = class_path
 

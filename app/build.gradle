@@ -50,6 +50,8 @@ dependencies {
   implementation deps.androidx.lifecycle_viewmodel_ktx
   implementation deps.androidx.annotation
   implementation deps.androidx.legacy_preference_v14
+  implementation deps.firebase.ads
+
   implementation deps.rx.rxjava2
   implementation deps.rx.rxandroid
   implementation deps.rx.rxkotlin2
@@ -73,3 +75,5 @@ dependencies {
   androidTestImplementation deps.atsl.runner
   androidTestImplementation deps.atsl.espressocore
 }
+
+apply plugin: 'com.google.gms.google-services'
