@@ -63,7 +63,7 @@ class SystemViewModel(var context: Context) : ViewModel() {
       infos.add(NormalInfo("Security patch", android.os.Build.VERSION.SECURITY_PATCH))
     }
     infos.add(NormalInfo("Bootloader", easyDeviceMod.bootloader))
-    infos.add(NormalInfo("Build id", easyDeviceMod.buildID))
+    infos.add(NormalInfo("Build value", easyDeviceMod.buildID))
     infos.add(NormalInfo("API level", easyDeviceMod.buildVersionSDK.toString()))
     infos.add(NormalInfo("Rooted", getRooted(easyDeviceMod.isDeviceRooted)))
     return infos
