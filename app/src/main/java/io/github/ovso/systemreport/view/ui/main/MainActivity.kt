@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.material.navigation.NavigationView
+import io.github.ovso.systemreport.BuildConfig
 import io.github.ovso.systemreport.R
 import io.github.ovso.systemreport.databinding.ActivityMainBinding
 import io.github.ovso.systemreport.view.ui.feature.battery.BatteryFragment
@@ -91,7 +92,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   }
 
   private fun showBannerAd() {
-    framelayout_adcontainer.addView(MyAdView.getAdmobBannerView(applicationContext))
+    if (BuildConfig.IS_FREE) {
+      framelayout_adcontainer.addView(MyAdView.getAdmobBannerView(applicationContext))
+    }
   }
 
   override fun onBackPressed() {
@@ -177,12 +180,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       reloadInterstitialAd()
     }
 
-    if (interstitialAd.isLoaded) {
-      interstitialAd.show()
-      interstitialAd.adListener = object : AdListener() {
-        override fun onAdClosed() {
-          show()
+    if (BuildConfig.IS_FREE) {
+
+      if (interstitialAd.isLoaded) {
+        interstitialAd.show()
+        interstitialAd.adListener = object : AdListener() {
+          override fun onAdClosed() {
+            show()
+          }
         }
+      } else {
+        show()
       }
     } else {
       show()
@@ -198,17 +206,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       reloadInterstitialAd()
     }
 
-    if (interstitialAd.isLoaded) {
-      interstitialAd.show()
-      interstitialAd.adListener = object : AdListener() {
-        override fun onAdClosed() {
-          show()
+    if (BuildConfig.IS_FREE) {
+
+      if (interstitialAd.isLoaded) {
+        interstitialAd.show()
+        interstitialAd.adListener = object : AdListener() {
+          override fun onAdClosed() {
+            show()
+          }
         }
+      } else {
+        show()
       }
     } else {
       show()
     }
-
   }
 
   private fun showSystemFragment() {
@@ -219,17 +231,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       reloadInterstitialAd()
     }
 
-    if (interstitialAd.isLoaded) {
-      interstitialAd.show()
-      interstitialAd.adListener = object : AdListener() {
-        override fun onAdClosed() {
-          show()
+    if (BuildConfig.IS_FREE) {
+      if (interstitialAd.isLoaded) {
+        interstitialAd.show()
+        interstitialAd.adListener = object : AdListener() {
+          override fun onAdClosed() {
+            show()
+          }
         }
+      } else {
+        show()
       }
     } else {
       show()
     }
-
   }
 
   private fun showBatteryFragment() {
@@ -240,12 +255,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       reloadInterstitialAd()
     }
 
-    if (interstitialAd.isLoaded) {
-      interstitialAd.show()
-      interstitialAd.adListener = object : AdListener() {
-        override fun onAdClosed() {
-          show()
+    if (BuildConfig.IS_FREE) {
+      if (interstitialAd.isLoaded) {
+        interstitialAd.show()
+        interstitialAd.adListener = object : AdListener() {
+          override fun onAdClosed() {
+            show()
+          }
         }
+      } else {
+        show()
       }
     } else {
       show()
