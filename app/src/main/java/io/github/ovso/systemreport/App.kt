@@ -9,6 +9,7 @@ class App : Application() {
     super.onCreate()
     AppInit.timber()
     AppInit.prefs(this)
+    AppInit.ad(this)
   }
 
 }
