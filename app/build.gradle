@@ -14,21 +14,6 @@ android {
     vectorDrawables.useSupportLibrary true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
-  flavorDimensions "default"
-  productFlavors {
-    free {
-      applicationIdSuffix ".free"
-      versionCode build_version.version_code
-      versionName build_version.version_name
-      buildConfigField("boolean", "IS_FREE", "true")
-    }
-    paid {
-      applicationIdSuffix ".paid"
-      versionCode 1
-      versionName "1.0.0"
-      buildConfigField("boolean", "IS_FREE", "false")
-    }
-  }
   buildTypes {
     release {
       minifyEnabled false
