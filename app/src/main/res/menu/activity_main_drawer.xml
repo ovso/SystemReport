@@ -5,37 +5,33 @@
 
   <group android:checkableBehavior="single">
     <item
+        android:id="@+id/nav_system"
+        android:icon="@drawable/ic_android"
+        android:title="@string/nav_system"/>
+    <item
         android:id="@+id/nav_screen"
-        android:icon="@drawable/ic_menu_camera"
-        android:title="Screen"/>
+        android:icon="@drawable/ic_smartphone"
+        android:title="@string/nav_screen"/>
     <item
         android:id="@+id/nav_battery"
-        android:icon="@drawable/ic_menu_slideshow"
-        android:title="Battery"/>
+        android:icon="@drawable/ic_battery"
+        android:title="@string/nav_battery"/>
     <item
-        android:id="@+id/nav_system"
-        android:icon="@drawable/ic_menu_gallery"
-        android:title="System"/>
-    <item
-        android:id="@+id/nav_thermal"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="Thermal"/>
-    <item
-        android:id="@+id/nav_sensors"
-        android:icon="@drawable/ic_menu_manage"
-        android:title="Sensors"/>
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/nav_settings"/>
   </group>
 
-  <item android:title="Communicate">
+  <item android:title="@string/nav_communicate">
     <menu>
       <item
           android:id="@+id/nav_share"
           android:icon="@drawable/ic_menu_share"
-          android:title="Share"/>
+          android:title="@string/nav_share"/>
       <item
-          android:id="@+id/nav_send"
-          android:icon="@drawable/ic_menu_send"
-          android:title="Send"/>
+          android:id="@+id/nav_review"
+          android:icon="@drawable/ic_review"
+          android:title="@string/nav_review"/>
     </menu>
   </item>
 

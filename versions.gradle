@@ -30,7 +30,11 @@ versions.core_ktx = '1.0.1'
 versions.lifecycle_viewmodel_ktx = '2.0.0'
 versions.lifecycle_extensions = '2.1.0-alpha02'
 versions.annotation = '1.0.2'
-
+versions.legacy_preference_v14 = '1.0.0'
+versions.licensedialog = '2.0.0'
+versions.easyprefs = '1.9.0'
+versions.firebase_ads = '17.2.0'
+versions.google_service = '4.2.0'
 def deps = [:]
 
 def androidx = [:]
@@ -46,7 +50,13 @@ androidx.lifecycle_viewmodel_ktx =
     "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle_viewmodel_ktx"
 androidx.lifecycle_extensions =
     "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle_extensions"
+androidx.legacy_preference_v14 =
+    "androidx.legacy:legacy-preference-v14:$versions.legacy_preference_v14"
 deps.androidx = androidx
+
+def firebase = [:]
+firebase.ads = "com.google.firebase:firebase-ads:$versions.firebase_ads"
+deps.firebase = firebase
 
 def atsl = [:]
 atsl.junit = "junit:junit:$versions.junit"
@@ -99,28 +109,33 @@ deps.jsr250_api = "javax.annotation:jsr250-api:$versions.jsr250_api"
 deps.lottie = "com.airbnb.android:lottie:$versions.lottie"
 deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
 deps.easydeviceinfo = "com.github.nisrulz:easydeviceinfo:$versions.easydeviceinfo"
+deps.licensedialog = "de.psdev.licensesdialog:licensesdialog:$versions.licensedialog"
+deps.easyprefs = "com.pixplicity.easyprefs:library:$versions.easyprefs"
 
 ext.deps = deps
 
 def class_path = [:]
 class_path.android_gradle = "com.android.tools.build:gradle:$versions.android_gradle"
 class_path.kotlin_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+class_path.google_service = "com.google.gms:google-services:$versions.google_service"
 
 ext.class_path = class_path
 
-def build_version = [:]
-build_version.compile_sdk = 28
-build_version.app_id = 'io.github.ovso.systemreport'
-build_version.min_sdk = 21
-build_version.target_sdk = 28
-build_version.version_code = 1
-build_version.version_name = '1.0'
+def config = [:]
+config.compile_sdk = 28
+config.app_id = 'io.github.ovso.systemreport'
+config.min_sdk = 21
+config.target_sdk = 28
+config.version_major = 1
+config.version_minor = 0
+config.version_patch = 0
 
-ext.build_version = build_version
+ext.config = config
 
 static def addRepos(RepositoryHandler handler) {
   handler.google()
   handler.jcenter()
+  handler.mavenCentral()
   handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
   handler.maven { url 'https://maven.fabric.io/public' }
   handler.maven { url "https://jitpack.io" }

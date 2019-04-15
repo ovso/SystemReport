@@ -1,8 +1,11 @@
 package io.github.ovso.systemreport.view.ui.main
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -10,27 +13,34 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.InterstitialAd
 import com.google.android.material.navigation.NavigationView
+import io.github.ovso.systemreport.BuildConfig
 import io.github.ovso.systemreport.R
-import io.github.ovso.systemreport.R.id
-import io.github.ovso.systemreport.R.layout
-import io.github.ovso.systemreport.R.string
 import io.github.ovso.systemreport.databinding.ActivityMainBinding
-import io.github.ovso.systemreport.view.ui.battery.BatteryFragment
-import io.github.ovso.systemreport.view.ui.screen.ScreenFragment
-import io.github.ovso.systemreport.view.ui.sensor.SensorsFragment
-import io.github.ovso.systemreport.view.ui.system.SystemFragment
-import io.github.ovso.systemreport.view.ui.thermal.ThermalFragment
-import io.github.ovso.systemreport.viewmodels.MainViewModel
+import io.github.ovso.systemreport.view.ui.feature.battery.BatteryFragment
+import io.github.ovso.systemreport.view.ui.feature.screen.ScreenFragment
+import io.github.ovso.systemreport.view.ui.feature.settings.SettingsFragment
+import io.github.ovso.systemreport.view.ui.feature.system.SystemFragment
 import kotlinx.android.synthetic.main.activity_main.drawer_layout
 import kotlinx.android.synthetic.main.activity_main.nav_view
+import kotlinx.android.synthetic.main.app_bar_main.framelayout_adcontainer
 import kotlinx.android.synthetic.main.app_bar_main.toolbar
+import timber.log.Timber
 
-//https://github.com/kamgurgul/cpu-info
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+  private lateinit var interstitialAd: InterstitialAd
+
+  fun reloadInterstitialAd() {
+    interstitialAd = MyAdView.getAdmobInterstitialAd(applicationContext)
+  }
+
   private var viewModel: MainViewModel? = null
   override fun onCreate(savedInstanceState: Bundle?) {
+    setTheme(R.style.AppTheme)
     super.onCreate(savedInstanceState)
+    interstitialAd = MyAdView.getAdmobInterstitialAd(applicationContext)
     setupBinding(savedInstanceState)
   }
 
@@ -38,24 +48,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
   private fun setupViewModel() {
     viewModel = ViewModelProviders.of(this, object : ViewModelProvider.Factory {
       override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return MainViewModel(application) as T
+        return MainViewModel(applicationContext) as T
       }
     })
         .get(MainViewModel::class.java)
 
   }
 
-  private fun setupNavigation() {
+  private fun setupNavigationView() {
     nav_view.setNavigationItemSelectedListener(this)
-    var item = nav_view.menu.getItem(0)
-    item.setChecked(true)
+    val item = nav_view.menu.getItem(0)
     onNavigationItemSelected(item)
+    item.isChecked = true
+
+    nav_view.getHeaderView(0)
+        .findViewById<TextView>(R.id.textview_nav_appname)
+        .text = String.format(
+        "%s(%s)", resources.getString(R.string.app_name), "${BuildConfig.VERSION_NAME}"
+    )
   }
 
   private fun setupDrawerLayout() {
     val toggle = ActionBarDrawerToggle(
-        this, drawer_layout, toolbar, string.navigation_drawer_open,
-        string.navigation_drawer_close
+        this, drawer_layout, toolbar, R.string.navigation_drawer_open,
+        R.string.navigation_drawer_close
     )
     drawer_layout.addDrawerListener(toggle)
     toggle.syncState()
@@ -67,9 +83,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   private fun setupBinding(savedInstanceState: Bundle?) {
     setupViewModel()
-    var binding: ActivityMainBinding = DataBindingUtil.setContentView(
+    val binding: ActivityMainBinding = DataBindingUtil.setContentView(
         this,
-        layout.activity_main
+        R.layout.activity_main
     )
 
     if (savedInstanceState == null) {
@@ -78,7 +94,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     setupToolbar()
     setupDrawerLayout()
-    setupNavigation()
+    setupNavigationView()
+    showBannerAd()
+  }
+
+  private fun showBannerAd() {
+    framelayout_adcontainer.addView(MyAdView.getAdmobBannerView(applicationContext))
   }
 
   override fun onBackPressed() {
@@ -99,29 +120,33 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // Handle action bar item clicks here. The action bar will
     // automatically handle clicks on the Home/Up button, so long
     // as you specify a parent activity in AndroidManifest.xml.
-    when (item.itemId) {
-      id.action_settings -> return true
-      else -> return super.onOptionsItemSelected(item)
+    return when (item.itemId) {
+      R.id.action_settings -> true
+      else -> super.onOptionsItemSelected(item)
     }
   }
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     // Handle navigation view item clicks here.
+    Timber.d("item check = ${item.isChecked}")
     when (item.itemId) {
-      id.nav_screen -> {
-        showScreenFragment()
+      R.id.nav_screen -> {
+        if (item.isChecked.not()) showScreenFragment()
       }
-      id.nav_battery -> {
-        showBatteryFragment()
+      R.id.nav_battery -> {
+        if (item.isChecked.not()) showBatteryFragment()
       }
-      id.nav_system -> {
-        showSystemFragment()
+      R.id.nav_system -> {
+        if (item.isChecked.not()) showSystemFragment()
       }
-      id.nav_thermal -> {
-        showThermalFragment()
+      R.id.nav_settings -> {
+        if (item.isChecked.not()) showSettingsFragment()
       }
-      id.nav_sensors -> {
-        showSensorsFragment()
+      R.id.nav_share -> {
+        navigateToShare()
+      }
+      R.id.nav_review -> {
+        navigateToReview()
       }
     }
 
@@ -129,33 +154,107 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     return true
   }
 
+  private fun navigateToReview() {
+    try {
+      startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?value=$packageName")))
+    } catch (anfe: android.content.ActivityNotFoundException) {
+      startActivity(
+          Intent(
+              Intent.ACTION_VIEW,
+              Uri.parse("https://play.google.com/store/apps/details?value=$packageName")
+          )
+      )
+    }
+
+  }
+
+  private fun navigateToShare() {
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.addCategory(Intent.CATEGORY_DEFAULT)
+    intent.putExtra(Intent.EXTRA_TITLE, "Share")
+    intent.type = "text/plain"
+    intent.putExtra(Intent.EXTRA_TEXT, "market://details?value=$packageName")
+    startActivity(Intent.createChooser(intent, "App share"))
+  }
+
+  private fun showSettingsFragment() {
+    fun show() {
+      supportFragmentManager.beginTransaction()
+          .replace(R.id.framelayout_main_fcontainer, SettingsFragment.newInstance())
+          .commitNow()
+      reloadInterstitialAd()
+    }
+    if (interstitialAd.isLoaded) {
+      interstitialAd.show()
+      interstitialAd.adListener = object : AdListener() {
+        override fun onAdClosed() {
+          show()
+        }
+      }
+    } else {
+      show()
+    }
+
+  }
+
   private fun showScreenFragment() {
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.framelayout_main_fcontainer, ScreenFragment.newInstance())
-        .commitNow();
-  }
-
-  private fun showSensorsFragment() {
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.framelayout_main_fcontainer, SensorsFragment.newInstance())
-        .commitNow();
-  }
-
-  private fun showThermalFragment() {
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.framelayout_main_fcontainer, ThermalFragment.newInstance())
-        .commitNow();
+    fun show() {
+      supportFragmentManager.beginTransaction()
+          .replace(R.id.framelayout_main_fcontainer, ScreenFragment.newInstance())
+          .commitNow()
+      reloadInterstitialAd()
+    }
+    if (interstitialAd.isLoaded) {
+      interstitialAd.show()
+      interstitialAd.adListener = object : AdListener() {
+        override fun onAdClosed() {
+          show()
+        }
+      }
+    } else {
+      show()
+    }
   }
 
   private fun showSystemFragment() {
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.framelayout_main_fcontainer, SystemFragment.newInstance())
-        .commitNow();
+    fun show() {
+      supportFragmentManager.beginTransaction()
+          .replace(R.id.framelayout_main_fcontainer, SystemFragment.newInstance())
+          .commitNow()
+      reloadInterstitialAd()
+    }
+
+    if (interstitialAd.isLoaded) {
+      interstitialAd.show()
+      interstitialAd.adListener = object : AdListener() {
+        override fun onAdClosed() {
+          show()
+        }
+      }
+    } else {
+      show()
+    }
+
   }
 
   private fun showBatteryFragment() {
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.framelayout_main_fcontainer, BatteryFragment.newInstance())
-        .commitNow();
+    fun show() {
+      supportFragmentManager.beginTransaction()
+          .replace(R.id.framelayout_main_fcontainer, BatteryFragment.newInstance())
+          .commitNow()
+      reloadInterstitialAd()
+    }
+
+    if (interstitialAd.isLoaded) {
+      interstitialAd.show()
+      interstitialAd.adListener = object : AdListener() {
+        override fun onAdClosed() {
+          show()
+        }
+      }
+    } else {
+      show()
+    }
+
   }
 }

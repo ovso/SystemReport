@@ -6,13 +6,13 @@
   <data>
     <variable
         name="viewModel"
-        type="io.github.ovso.systemreport.viewmodels.fragment.SystemViewModel"
+        type="io.github.ovso.systemreport.view.ui.feature.system.SystemViewModel"
         />
   </data>
   <androidx.core.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@android:color/black"
+      android:scrollbars="vertical"
       >
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,6 +23,7 @@
           android:id="@+id/recyclerview_system"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:overScrollMode="never"
           app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
           tools:listitem="@layout/item_all"
           />

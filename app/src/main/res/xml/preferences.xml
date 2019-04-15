@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+  <ListPreference
+      android:defaultValue="0"
+      android:entries="@array/prefs_temperature_names"
+      android:entryValues="@array/prefs_temperature_values"
+      android:key="temperature_unit"
+      android:title="@string/temperature_unit"
+      app:iconSpaceReserved="false"/>
+  <Preference
+      android:key="opensource"
+      android:title="@string/prefs_opensource"
+      app:iconSpaceReserved="false"
+      />
+</PreferenceScreen>

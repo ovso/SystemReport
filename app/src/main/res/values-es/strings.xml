@@ -1,0 +1,20 @@
+<resources>
+  <string name="app_name">Informes del sistema</string>
+  <string name="navigation_drawer_open">Open navigation drawer</string>
+  <string name="navigation_drawer_close">Close navigation drawer</string>
+  <string name="nav_header_title">Android Studio</string>
+  <string name="nav_header_subtitle">android.studio@android.com</string>
+  <string name="nav_header_desc">Navigation header</string>
+  <string name="action_settings">settings</string>
+  <string name="temperature_unit">Unidad de temperatura</string>
+  <string name="prefs_opensource">Licencia de código abierto</string>
+  <string name="all_copied">copié el valor.</string>
+  <string name="nav_screen">Screen</string>
+  <string name="nav_battery">Battery</string>
+  <string name="nav_system">System</string>
+  <string name="nav_settings">Configuración</string>
+  <string name="nav_communicate">Communication</string>
+  <string name="nav_share">Compartir</string>
+  <string name="nav_review">Revisar</string>
+  <string name="developer_email">ovsoc@daum.net</string>
+</resources>
