@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -54,11 +55,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
   }
 
-  private fun setupNavigation() {
+  private fun setupNavigationView() {
     nav_view.setNavigationItemSelectedListener(this)
     val item = nav_view.menu.getItem(0)
     onNavigationItemSelected(item)
     item.isChecked = true
+
+    nav_view.getHeaderView(0)
+        .findViewById<TextView>(R.id.textview_nav_appname)
+        .text = String.format(
+        "%s(%s)", resources.getString(R.string.app_name), "${BuildConfig.VERSION_NAME}"
+    )
   }
 
   private fun setupDrawerLayout() {
@@ -87,7 +94,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     setupToolbar()
     setupDrawerLayout()
-    setupNavigation()
+    setupNavigationView()
     showBannerAd()
   }
 

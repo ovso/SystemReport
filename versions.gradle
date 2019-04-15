@@ -121,15 +121,16 @@ class_path.google_service = "com.google.gms:google-services:$versions.google_ser
 
 ext.class_path = class_path
 
-def build_version = [:]
-build_version.compile_sdk = 28
-build_version.app_id = 'io.github.ovso.systemreport'
-build_version.min_sdk = 21
-build_version.target_sdk = 28
-build_version.version_code = 1
-build_version.version_name = '1.0'
+def config = [:]
+config.compile_sdk = 28
+config.app_id = 'io.github.ovso.systemreport'
+config.min_sdk = 21
+config.target_sdk = 28
+config.version_major = 1
+config.version_minor = 0
+config.version_patch = 0
 
-ext.build_version = build_version
+ext.config = config
 
 static def addRepos(RepositoryHandler handler) {
   handler.google()

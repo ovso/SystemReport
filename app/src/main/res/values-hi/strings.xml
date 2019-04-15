@@ -16,4 +16,5 @@
   <string name="nav_communicate"> संचार </string>
   <string name="nav_share"> शेयरिंग </string>
   <string name="nav_review"> समीक्षा </string>
+  <string name="developer_email">ovsoc@daum.net</string>
 </resources>
